@@ -36,5 +36,6 @@
             "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
         }
     ],
+    "BaseUrl": "http://127.0.0.1:9000",
     "pageTotal": 4
 }

@@ -1,0 +1,1 @@
+npm install --save-dev vue2-ace-editor

@@ -1,24 +1,110 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+
 Vue.use(Router);
 
 export default new Router({
     routes: [
         {
             path: '/',
-            redirect: '/dashboard'
+            redirect: '/dashboard',
+            name:'index'
         },
         {
             path: '/',
             component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
-            meta: { title: '自述文件' },
+            meta: { title: '系统首页' },
             children: [
                 {
                     path: '/dashboard',
                     component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
                     meta: { title: '系统首页' }
                 },
+                {
+                    path: '/projectslist',
+                    component: () => import('../components/page/projectMessage/project.vue'),
+                    meta: { title: '项目列表' }
+                },
+
+                // {
+                //     path: '/projectslist',
+                //     component: () => import('../components/page/projectMessage/ProjectsList.vue'),
+                //     meta: { title: '项目列表' }
+                // },
+                {
+                    path: '/projectadd',
+                    component: () => import('../components/page/projectMessage/ProjectAdd.vue'),
+                    meta: { title: '项目新增' }
+                },
+                {
+                    path: '/envslist',
+                    component: () => import('../components/page/EnvsList'),
+                    meta: { title: '环境列表' }
+                },
+                {
+                    path: '/envsadd',
+                    component: () => import('../components/page/EnvsAdd'),
+                    meta: { title: '新增环境' }
+                },
+                {
+                    path: '/debugtalkslist',
+                    component: () => import('../components/page/DebugtalksList'),
+                    meta: { title: '函数列表' }
+                },
+                {
+                    path: '/debugtalksadd',
+                    component: () => import('../components/page/buildInFunc'),
+                    meta: { title: '函数列表' }
+                },
+                {
+                    path: '/debugtalkedit',
+                    component: () => import('../components/page/DebugtalkEdit'),
+                    meta: { title: '函数修改' }
+                },
+                {
+                    path: '/interfaceslist',
+                    component: () => import('../components/page/InterfacesList'),
+                    meta: { title: '接口列表' }
+                },
+                {
+                    path: '/interfacesadd',
+                    component: () => import('../components/page/InterfacesAdd'),
+                    meta: { title: '新增接口' }
+                },
+
+                {
+                    path: '/testcaseslist',
+                    component: () => import('../components/page/TestcasesList'),
+                    meta: { title: '用例列表' }
+                },{
+                    path: '/testcasesadd',
+                    component: () => import('../components/page/TestcasesAdd'),
+                    meta: { title: '新增用例' }
+                },
+                {
+                    path: '/configurslist',
+                    component: () => import('../components/page/ConfiguresList'),
+                    meta: { title: '配置列表' }
+                },
+                {
+                    path: '/configuresedit',
+                    component: () => import('../components/page/ConfiguresEdit'),
+                    meta: { title: '配置修改' }
+                },
+                {
+                    path: '/testsuitslist',
+                    component: () => import('../components/page/TestsuitsList'),
+                    meta: { title: '套件列表' }
+                },
+
+
+
+
+
+
+
+
                 {
                     path: '/icon',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
@@ -108,6 +194,11 @@ export default new Router({
             path: '/login',
             component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue'),
             meta: { title: '登录' }
+        },
+        {
+            path: '/register',
+            component: () => import(/* webpackChunkName: "register" */ '../components/page/Register.vue'),
+            meta: { title: '注册' }
         },
         {
             path: '*',
