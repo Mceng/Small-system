@@ -1,9 +1,9 @@
 <template>
-    <div class="sceneConfig">
+    <div class="moduleManage">
 
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目名称" labelWidth="110px">
-                <el-select v-model="form.projectId" placeholder="请选择项目">
+                <el-select v-model="form.projectId" @change="getModules" placeholder="请选择项目">
                     <el-option
                             v-for="(item) in proAndIdData"
                             :key="item.id"
@@ -12,16 +12,11 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="配置名称">
-                <el-input placeholder="请输入配置" v-model="form.configName">
-                </el-input>
-            </el-form-item>
             <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click.native="configHandleCurrentChange(1)">
-                    搜索
-                </el-button>
-                <el-button type="primary" @click.native="$refs.configEditFunc.initConfigData()">添加配置
-                </el-button>
+                <!--<el-button type="primary" icon="el-icon-search" @click.native="configHandleCurrentChange(1)">-->
+                    <!--搜索-->
+                <!--</el-button>-->
+                <el-button type="primary" @click.native="$refs.EditFunc.initConfigData()">添加模块</el-button>
             </el-form-item>
         </el-form>
 
@@ -31,7 +26,7 @@
                           max-height="725"
                           stripe>
                     <el-table-column
-                            prop="num"
+                            prop="id"
                             label="编号"
                             min-width="40">
                     </el-table-column>
@@ -45,11 +40,11 @@
                             min-width="250">
                         <template slot-scope="scope">
                             <el-button type="primary" icon="el-icon-edit" size="mini"
-                                       @click.native="$refs.configEditFunc.editSceneConfig(tableData[scope.$index]['id'])">
+                                       @click.native="$refs.EditFunc.getmMdule(tableData[scope.$index]['id'])">
                                 编辑
                             </el-button>
                             <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="sureView(delConfig,tableData[scope.$index]['id'],tableData[scope.$index]['name'])">
+                                       @click.native="sureView(delmodule,tableData[scope.$index]['id'],tableData[scope.$index]['name'])">
                                 删除
                             </el-button>
                         </template>
@@ -69,36 +64,34 @@
             </el-tab-pane>
         </el-tabs>
 
-        <configEdit
+        <moduleEdit
                 :proAndIdData="proAndIdData"
                 :projectId="form.projectId"
-                :funcAddress="funcAddress"
-                ref="configEditFunc">
-        </configEdit>
+                :tableData="tableData.id"
+                ref="EditFunc">
+        </moduleEdit>
 
     </div>
 </template>
 
 <script>
-    import configEdit from './configEdit.vue'
+    import moduleEdit from './moduleEdit.vue'
 
     export default {
         components: {
-            configEdit: configEdit,
+            moduleEdit: moduleEdit,
 
         },
         name: 'module',
         data() {
             return {
-                funcAddress: null,
                 proAndIdData: '',
                 tableData: Array(),
                 total: 1,
                 currentPage: 1,
-                sizePage: 20,
+                sizePage: 10,
                 form: {
                     projectId: null,
-                    configName: null,
                 },
             }
         },
@@ -106,55 +99,45 @@
 
         methods: {
             httpSend() {
-                this.$axios.get(this.$api.getModules).then((response) => {
-                        this.proAndIdData = response.data['pro_and_id'];
-
-                        if (response.data['user_pros']) {
+                this.$axios.get(this.$api.getProName).then((response) => {
+                        this.proAndIdData = response.data;
+                        console.log(this.proAndIdData);
+                        if (response.data) {
                             this.form.projectId = this.proAndIdData[0].id;
-                            this.findConfig();
+                            this.getModules();
                         }
-
-
                     }
                 );
-
-
-
-                this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
-                        this.funcAddress = response['data']['data'];
-                    }
-                )
             },
             configHandleCurrentChange(val) {
                 this.currentPage = val;
-                this.findConfig()
+                this.getModules()
             },
             configHandleSizeChange(val) {
                 this.sizePage = val;
-                this.findConfig()
+                this.getModules()
             },
-            findConfig() {
-                this.$axios.post(this.$api.findConfigApi, {
-                    'projectId': this.form.projectId,
-                    'configName': this.form.configName,
-                    'page': this.currentPage,
-                    'sizePage': this.sizePage,
+            getModules() {
+                this.$axios.get(this.$api.getModules + this.form.projectId + '/modules/', {
+                    params: {
+                        'page': this.currentPage,
+                        'size': this.sizePage,
+                    }
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
-                            this.tableData = response.data['data'];
-                            this.total = response.data['total'];
+                            this.tableData = response.data['results'];
+                            this.total = response.data['count'];
                         }
                     }
                 )
             },
-            delConfig(id) {
-                this.$axios.post(this.$api.delConfigApi, {'id': id}).then((response) => {
+            delmodule(id) {
+                this.$axios.delete(this.$api.delModule+id+'/').then((response) => {
                         this.messageShow(this, response);
-                        this.form.configName = null;
                         if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {
                             this.currentPage = this.currentPage - 1
                         }
-                        this.findConfig();
+                        this.getModules();
                     }
                 )
             },

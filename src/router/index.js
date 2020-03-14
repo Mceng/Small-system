@@ -27,11 +27,11 @@ export default new Router({
                     meta: { title: '项目列表' }
                 },
 
-                // {
-                //     path: '/projectslist',
-                //     component: () => import('../components/page/projectMessage/ProjectsList.vue'),
-                //     meta: { title: '项目列表' }
-                // },
+                {
+                    path: '/moduleManage',
+                    component: () => import('../components/page/module/module.vue'),
+                    meta: { title: '模块管理' }
+                },
                 {
                     path: '/projectadd',
                     component: () => import('../components/page/projectMessage/ProjectAdd.vue'),

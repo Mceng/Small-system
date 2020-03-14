@@ -223,7 +223,7 @@
     import importApi from './importApi.vue'
     import apiEdit from './apiEdit.vue'
     import errorView from '../../common/errorView.vue'
-    import configEdit from '../module/configEdit.vue'
+    import configEdit from '../module/moduleEdit.vue'
 
     export default {
         components: {

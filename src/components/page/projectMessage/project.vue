@@ -251,7 +251,6 @@
                         'size': this.sizePage,
                     }
                 }).then((response) => {
-                        console.log(response);
                         this.tableData = response.data.results;
                         this.total = response.data.count;
                     }
@@ -378,17 +377,7 @@
             delProjectHeader(i) {
                 this.projectData.header.splice(i, 1);
             },
-            environmentShow(choice) {
-                if (choice === 'first') {
-                    return '测试环境'
-                } else if (choice === 'second') {
-                    return '开发环境'
-                } else if (choice === 'third') {
-                    return '线上环境'
-                } else if (choice === 'fourth') {
-                    return '备用环境'
-                }
-            },
+
             delTableRow(type, i) {
                 this.$confirm('删除url会影响到整体排序,接口那边的引用是依据url的顺序来的,请认真考虑一下?', '提示', {
                     confirmButtonText: '确定',
