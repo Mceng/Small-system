@@ -76,6 +76,10 @@
                             {
                                 index: 'moduleManage',
                                 title: '模块管理'
+                            },
+                            {
+                                index: 'apiMessage',
+                                title: '接口管理'
                             }
                         ]
                     },

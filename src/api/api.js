@@ -18,6 +18,8 @@ const getProName = host+'/projects/names/';
 
 
 // 项目
+
+const ProjectsApi = host+'/projects/';
 const addprojects = host+'/projects/';
 const findProApi = host+'/projects/';
 const editProApi = host+'/projects/';
@@ -26,8 +28,13 @@ const delProApi = host+'/projects/';
 
 
 
+
+
 // 模块/projects/5/modules/
 const getModules = host+'/projects/';
+
+const Modules = host+'/modules/';
+
 const addModules = host+'/modules/';
 const delModule = host+'/modules/';
 const getModule = host+'/modules/';
@@ -35,8 +42,11 @@ const putModule = host+'/modules/';
 
 
 
+// 接口interfaces
+const InterfaceApi = host+'/interfaces/';
 
 export default {
+    ProjectsApi,
     getProName,
     addprojects,
     findProApi,
@@ -48,5 +58,7 @@ export default {
     delModule,
     getModule,
     putModule,
+    Modules,
+    InterfaceApi,
 
 }

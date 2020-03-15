@@ -101,7 +101,6 @@
             httpSend() {
                 this.$axios.get(this.$api.getProName).then((response) => {
                         this.proAndIdData = response.data;
-                        console.log(this.proAndIdData);
                         if (response.data) {
                             this.form.projectId = this.proAndIdData[0].id;
                             this.getModules();

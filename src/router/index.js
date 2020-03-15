@@ -33,6 +33,16 @@ export default new Router({
                     meta: { title: '模块管理' }
                 },
                 {
+                    path: '/apiMessage',
+                    component: () => import('../components/page/apiMessage/apiMsg.vue'),
+                    meta: { title: '模块管理' }
+                },
+
+
+
+
+
+                {
                     path: '/projectadd',
                     component: () => import('../components/page/projectMessage/ProjectAdd.vue'),
                     meta: { title: '项目新增' }

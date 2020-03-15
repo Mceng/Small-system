@@ -14,27 +14,31 @@
                             :value="item.id">
                     </el-option>
                 </el-select>
-                <el-select
-                        v-model="form.configId"
-                        placeholder="请选择配置"
-                        clearable
-                        value-key="configId"
-                        style="width: 150px"
-                >
-                    <el-option
+                <!--<el-select-->
+                        <!--v-model="form.configId"-->
+                        <!--placeholder="请选择配置"-->
+                        <!--clearable-->
+                        <!--value-key="configId"-->
+                        <!--style="width: 150px"-->
+                <!--&gt;-->
+                    <!--<el-option-->
 
-                            v-for="item in configData[form.projectId]"
-                            :key="item.configId"
-                            :label="item.name"
-                            :value="item.configId">
-                    </el-option>
-                </el-select>
+                            <!--v-for="item in configData[form.projectId]"-->
+                            <!--:key="item.configId"-->
+                            <!--:label="item.name"-->
+                            <!--:value="item.configId">-->
+                    <!--</el-option>-->
+                <!--</el-select>-->
             </el-form-item>
 
             <el-form-item label="接口名称" v-if="numTab !== 'third'">
                 <el-input placeholder="请输入" v-model="form.apiName" clearable style="width: 150px">
                 </el-input>
             </el-form-item>
+            <!--<el-form-item label="套件名称" v-if="numTab === 'third'">-->
+            <!--<el-input placeholder="请输入" v-model="form.suiteName" clearable>-->
+            <!--</el-input>-->
+            <!--</el-form-item>-->
 
             <el-form-item>
                 <el-button type="primary" icon="el-icon-search" @click.native="handleCurrentChange(1)">搜索</el-button>
@@ -44,7 +48,7 @@
 
                 <el-button type="primary" icon="el-icon-view" @click.native="$refs.resultFunc.lastResult()">{{null}}
                 </el-button>
-                <!--                <el-button type="primary" @click.native="$refs.importApiFunc.initData()">导入信息</el-button>-->
+                <el-button type="primary" @click.native="$refs.importApiFunc.initData()">导入信息</el-button>
                 <el-button type="primary"
                            v-if="form.configId !== null && form.configId !== '' "
                            @click.native="$refs.configEditFunc.editSceneConfig(form.configId)">配置修改
@@ -62,16 +66,15 @@
                                       <span class="el-dropdown-link" style="color: #4ae2d5">
                                         操作<i class="el-icon-arrow-down el-icon--right"></i>
                                       </span>
-                                    <!--<el-button size="mini" type="info">-->
-                                    <!--操作<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
-                                    <!--</el-button>-->
+
                                     <el-dropdown-menu slot="dropdown">
                                         <el-dropdown-item command="add">添加</el-dropdown-item>
                                         <el-dropdown-item command="edit">编辑</el-dropdown-item>
-                                        <el-dropdown-item command="stick">置顶</el-dropdown-item>
+                                        <!--<el-dropdown-item command="stick">置顶</el-dropdown-item>-->
                                         <el-dropdown-item command="del">删除</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </el-dropdown>
+
                             </el-col>
                         </el-row>
                         <el-row>
@@ -81,7 +84,7 @@
                                         @node-click="treeClick"
                                         class="filter-tree"
                                         highlight-current
-                                        node-key="moduleId"
+                                        node-key="id"
                                         :data="moduleDataList"
                                         :props="defaultProps"
 
@@ -113,7 +116,7 @@
                                     width="45">
                             </el-table-column>
                             <el-table-column
-                                    prop="num"
+                                    prop="id"
                                     label="编号"
                                     width="60">
                             </el-table-column>
@@ -224,6 +227,8 @@
     import apiEdit from './apiEdit.vue'
     import errorView from '../../common/errorView.vue'
     import configEdit from '../module/moduleEdit.vue'
+    // import errorView from '../common/errorView.vue'
+    // import configEdit from '../config/configEdit.vue'
 
     export default {
         components: {
@@ -265,15 +270,15 @@
                 moduleData: {
                     viewStatus: false,
                     id: '',
-                    num: '',
+                    // num: '',
                     name: '',
                 },
                 form: {
                     configId: null,
                     module: {
                         name: '',
-                        moduleId: '',
-                        num: '',
+                        id: '',
+                        // num: '',
                     },
                     projectId: null,
                     apiName: null,
@@ -285,26 +290,34 @@
         methods: {
             initBaseData() {
                 //  初始化页面所需要的数据
-                this.$axios.get(this.$api.baseDataApi).then((response) => {
-                        this.proAndIdData = response.data['pro_and_id'];
-                        this.configData = response.data['config_name_list'];
-                        this.proUrlData = response.data['urlData'];
-                        this.proModelData = response.data['data'];
-                        if (response.data['user_pros']) {
-                            this.form.projectId = this.proAndIdData[0].id;
-
-                            // if (this.configData[this.form.projectId].length !== 0) {
-                            //     this.form.configId = this.configData[this.form.projectId]['configId'];
-                            // }
-                            this.findModule()
-                        }
-                        this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
-                                this.funcAddress = response['data']['data'];
-                            }
-                        )
-
+                this.$axios.get(this.$api.getProName).then((response) => {
+                    this.proAndIdData = response.data;
+                    if (this.proAndIdData) {
+                        this.form.projectId = this.proAndIdData[0].id;
+                        this.findModule();
                     }
-                )
+                });
+
+                // this.$axios.get(this.$api.baseDataApi).then((response) => {
+                //         this.proAndIdData = response.data['pro_and_id'];
+                //         this.configData = response.data['config_name_list'];
+                //         this.proUrlData = response.data['urlData'];
+                //         this.proModelData = response.data['data'];
+                //         if (response.data['user_pros']) {
+                //             this.form.projectId = this.proAndIdData[0].id;
+                //
+                //             // if (this.configData[this.form.projectId].length !== 0) {
+                //             //     this.form.configId = this.configData[this.form.projectId]['configId'];
+                //             // }
+                //             this.findModule()
+                //         }
+                //         this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
+                //                 this.funcAddress = response['data']['data'];
+                //             }
+                //         )
+                //
+                //     }
+                // )
             },
             moduleCommand(command) {
                 //  模块处理函数，根据命令执行不同操作
@@ -338,23 +351,23 @@
                     });
                     return
                 }
-                this.$axios.post(this.$api.findApiApi, {
-                    'apiName': this.form.apiName,
-                    'projectId': this.form.projectId,
-                    'moduleId': this.form.module.moduleId,
-                    'page': this.apiMsgPage.currentPage,
-                    'sizePage': this.apiMsgPage.sizePage,
+                this.$axios.get(this.$api.InterfaceApi, { params: {
+                        'project_id': this.form.projectId,
+                        'module_id': this.form.module.id,
+                        'page': this.apiMsgPage.currentPage,
+                        'size': this.apiMsgPage.sizePage,
+                    }
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
-                            this.ApiMsgTableData = response.data['data'];
-                            this.apiMsgPage.total = response.data['total'];
+                            this.ApiMsgTableData = response.data['results'];
+                            this.apiMsgPage.total = response.data['count'];
                         }
                     }
                 )
             },
             initData() {
                 //  初始化数据并进入接口编辑tab
-                if (!this.form.module.moduleId) {
+                if (!this.form.module.id) {
                     this.$message({
                         showClose: true,
                         message: '请先创建接口模块',
@@ -431,8 +444,8 @@
 
             initProjectChoice() {
                 //  当项目选择项改变时，初始化模块和配置的数据
-                this.form.configId = null;
-                this.form.module = {name: null, moduleId: null,};
+                // this.form.configId = null;
+                this.form.module = {name: null, id: null};
                 this.modulePage.currentPage = 1;
                 this.apiMsgPage.currentPage = 1;
                 this.findModule()
@@ -440,19 +453,20 @@
 
             findModule() {
                 //  查询接口模块
-                this.$axios.post(this.$api.findModuleApi, {
-                    'projectId': this.form.projectId,
-                    'page': this.modulePage.currentPage,
-                    'sizePage': this.modulePage.sizePage,
+                this.$axios.get(this.$api.ProjectsApi + this.form.projectId + '/modules/', {
+                    params: {
+                        'page': this.modulePage.currentPage,
+                        'size': this.modulePage.sizePage,
+                    }
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
-                            this.moduleDataList = response.data['data'];
-                            this.modulePage.total = response.data['total'];
-                            this.proModelData[this.form.projectId] = response.data['all_module'];
+                            this.moduleDataList = response.data['results'];
+                            this.modulePage.total = response.data['count'];
+                            this.proModelData = response.data['results'];
                             if(this.moduleDataList.length !== 0){
                                 this.form.module = this.moduleDataList[0];
                                 this.$nextTick(function () {
-                                    this.$refs.testTree.setCurrentKey(this.form.module.moduleId);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
+                                    this.$refs.testTree.setCurrentKey(this.form.module.id);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
                                 });
                                 this.findApiMsg();
                             }else {
@@ -473,7 +487,7 @@
             },
             treeClick(data) {
                 //  点击节点时，初始化数据并获取对应的接口信息
-                let index = this.moduleDataList.map(item => item.moduleId).indexOf(data['moduleId']);  //  获取当前节点的下标
+                let index = this.moduleDataList.map(item => item.id).indexOf(data['id']);  //  获取当前节点的下标
                 this.form.module = this.moduleDataList[index];
                 this.apiMsgPage.currentPage = 1;
                 this.findApiMsg();

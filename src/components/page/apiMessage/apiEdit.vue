@@ -397,6 +397,7 @@
     import result from './result.vue'
     import errorView from '../../common/errorView.vue'
 
+
     export default {
         components: {
             editor: require('vue2-ace-editor'),
