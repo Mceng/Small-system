@@ -136,15 +136,15 @@
                                     width="320">
                                 <template slot-scope="scope">
                                     <el-button type="primary" icon="el-icon-edit" size="mini"
-                                               @click.native="editCopyApi(ApiMsgTableData[scope.$index]['apiMsgId'],'edit')">
+                                               @click.native="editCopyApi(ApiMsgTableData[scope.$index]['id'],'edit')">
                                         编辑
                                     </el-button>
                                     <el-button type="primary" icon="el-icon-tickets" size="mini"
-                                               @click.native="editCopyApi(ApiMsgTableData[scope.$index]['apiMsgId'],'copy')">
+                                               @click.native="editCopyApi(ApiMsgTableData[scope.$index]['id'],'copy')">
                                         复制
                                     </el-button>
                                     <el-button type="danger" icon="el-icon-delete" size="mini"
-                                               @click.native="sureView(delApi,ApiMsgTableData[scope.$index]['apiMsgId'],ApiMsgTableData[scope.$index]['name'])">
+                                               @click.native="sureView(delApi,ApiMsgTableData[scope.$index]['id'],ApiMsgTableData[scope.$index]['name'])">
                                         删除
                                     </el-button>
                                 </template>
@@ -172,7 +172,7 @@
                          style="background-color: rgb(250, 250, 250);min-height: 760px">
                 <apiEdit
                         :projectId="form.projectId"
-                        :moduleId="form.module.moduleId"
+                        :moduleId="form.module.id"
                         :configData="form.config"
                         :proAndIdData="proAndIdData"
                         :proModelData="proModelData"
@@ -406,11 +406,7 @@
             apiTest(apiMsgData = null) {
                 //  接口调试
                 this.loading = true;
-                this.$axios.post(this.$api.runApiApi, {
-                    'apiMsgData': apiMsgData,
-                    'projectId': this.form.projectId,
-                    'configId': this.form.configId,
-                }).then((response) => {
+                this.$axios.get(this.$api.InterfaceApi + apiMsgData.apiMsgId + '/run/').then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
                                 showClose: true,

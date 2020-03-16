@@ -21,23 +21,26 @@
                            size="small"
                            style="width: 200px;padding-right:10px">
                     <el-option
-                            v-for="(item) in proModelData[form.projectId]"
-                            :key="item.moduleId"
+                            v-for="(item) in proModelData"
+                            :key="item.id"
                             :label="item.name"
-                            :value="item.moduleId">
+                            :value="item.id">
                     </el-option>
                 </el-select>
-                <el-select v-model="form.choiceUrl"
-                           clearable placeholder="请选择url"
-                           size="small">
-                    <el-option
-                            v-for="item in proUrlData[form.projectId]"
-                            :key="item"
-                            :label="item"
-                            :value="item"
-                    >
-                    </el-option>
-                </el-select>
+                <!--<el-select v-model="form.choiceUrl"-->
+                <!--clearable placeholder="请选择url"-->
+                <!--size="small">-->
+                <!--<el-option-->
+                <!--v-for="item in proUrlData[form.projectId]"-->
+                <!--:key="item"-->
+                <!--:label="item"-->
+                <!--:value="item"-->
+                <!--&gt;-->
+                <!--</el-option>-->
+                <!--</el-select>-->
+                <el-input placeholder="请选择项目请求URL" v-model="form.choiceUrl" style="width: 200px"
+                          :disabled="true"></el-input>
+
             </el-form-item>
 
             <el-form-item label="接口编号"
@@ -46,7 +49,7 @@
                           v-if="apiMsgData.id"
                           style="margin-bottom: 5px">
 
-                <el-input v-model.number="apiMsgData.num"
+                <el-input v-model.number="apiMsgData.id"
                           placeholder="接口编号"
                           size="small"
                           style="width: 70px;text-align:center;">
@@ -70,9 +73,11 @@
                 </el-input>
             </el-form-item>
             <el-form-item prop="name" style="margin-bottom: 5px">
-                <el-input v-model="apiMsgData.skip" placeholder="跳过判断，True跳过该请求" size="small">
-                </el-input>
+                <!--<el-input v-model="apiMsgData.skip" placeholder="跳过判断，True跳过该请求" size="small"></el-input>-->
+                <el-switch v-model="apiMsgData.skip" inactive-text="跳过判断" active-color="#13ce66">
+                </el-switch>
             </el-form-item>
+
 
         </el-form>
         <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
@@ -380,9 +385,9 @@
             </el-tab-pane>
         </el-tabs>
 
-        <v-contextmenu ref="contextmenu">
-            <v-contextmenu-item @click="handleClick">clear</v-contextmenu-item>
-        </v-contextmenu>
+        <!--<v-contextmenu ref="contextmenu">-->
+        <!--<v-contextmenu-item @click="handleClick">clear</v-contextmenu-item>-->
+        <!--</v-contextmenu>-->
 
         <result ref="resultFunc">
         </result>
@@ -399,6 +404,7 @@
 
 
     export default {
+
         components: {
             editor: require('vue2-ace-editor'),
             result: result,
@@ -408,6 +414,10 @@
         props: ['proAndIdData', 'projectId', 'proUrlData', 'configData', 'proModelData', 'moduleId'],
         data() {
             return {
+                modulePage: {
+                    currentPage: 1,
+                    sizePage: 300,
+                },
                 bodyShow: 'second',
                 paramTypes: ['string', 'file'],
                 cell: Object(),
@@ -420,26 +430,29 @@
                     projectId: null,
                     configName: null,
                     moduleId: null,
-                    choiceUrl: '基础url1',
+                    choiceUrl: '',
                     choiceType: 'data',
                 },
-                comparators: [{'value': 'equals'}, {'value': 'less_than'}, {'value': 'less_than_or_equals'},
-                    {'value': 'greater_than'}, {'value': 'greater_than_or_equals'}, {'value': 'not_equals'},
-                    {'value': 'string_equals'}, {'value': 'length_equals'}, {'value': 'length_greater_than'},
-                    {'value': 'count_greater_than_or_equals'}, {'value': 'length_less_than'},
-                    {'value': 'length_less_than_or_equals'}],
+                comparators: [
+                    {'value': 'equals'}, {'value': 'less_than'},
+                    {'value': 'less_than_or_equals'}, {'value': 'length_less_than_or_equals'},
+                    {'value': 'greater_than'}, {'value': 'greater_than_or_equals'},
+                    {'value': 'not_equals'}, {'value': 'length_less_than'},
+                    {'value': 'string_equals'}, {'value': 'length_equals'},
+                    {'value': 'length_greater_than'}, {'value': 'count_greater_than_or_equals'}
+                ],
                 apiMsgData: {
                     id: null,
                     project: null,
                     method: 'POST',
                     status_url: null,
                     name: null,
-                    num: null,
+                    // num: null,
                     desc: null,
                     funcAddress: null,
                     upFunc: null,
                     downFunc: null,
-                    skip: null,
+                    skip: false,
                     formLabelWidth: '80px',
                     url: '',
                     param: [{key: null, value: null}],
@@ -465,8 +478,32 @@
             changeProChoice() {
                 //  改变项目选项时，清空模块和基础url的选择
                 this.form.moduleId = '';
-                this.form.choiceUrl = ''
+                this.getProUrl();
+                // this.form.choiceUrl = '';
+
+                //  查询接口模块
+                this.$axios.get(this.$api.ProjectsApi + this.form.projectId + '/modules/', {
+                    params: {
+                        'page': this.modulePage.currentPage,
+                        'size': this.modulePage.sizePage,
+                    }
+                }).then((response) => {
+                        if (this.messageShow(this, response)) {
+                            this.proModelData = response.data['results'];
+                        }
+                    }
+                );
+
+
             },
+            //  基础url
+            getProUrl() {
+                this.$axios.get(this.$api.ProjectsApi + this.form.projectId)
+                    .then((response) => {
+                        this.form.choiceUrl = response.data['host'];
+                    })
+            },
+
             querySearch(queryString, cb) {
                 // 调用 callback 返回建议列表的数据
                 cb(this.comparators);
@@ -529,7 +566,6 @@
             },
             initApiMsgData() {
                 this.form.choiceType = 'data';
-
                 this.apiMsgData.header = Array();
                 this.apiMsgData.variable = Array();
                 this.apiMsgData.param = Array();
@@ -537,8 +573,8 @@
                 this.apiMsgData.extract = Array();
                 this.apiMsgData.validate = Array();
                 this.apiMsgData.name = null;
-                this.apiMsgData.num = null;
-                this.apiMsgData.funcAddress = null;
+                // this.apiMsgData.num = null;
+                // this.apiMsgData.funcAddress = null;
                 this.apiMsgData.upFunc = null;
                 this.apiMsgData.downFunc = null;
                 this.apiMsgData.desc = null;
@@ -546,7 +582,8 @@
                 this.apiMsgData.url = String();
                 this.form.projectId = this.projectId;
                 this.form.moduleId = this.moduleId;
-                this.form.choiceUrl = this.proUrlData[this.projectId][0];
+                this.getProUrl();
+                // this.form.choiceUrl = this.proUrlData[this.projectId][0];
             },
             addApiMsg(messageClose = false) {
                 if (this.apiMsgData.jsonVariable) {
@@ -569,24 +606,27 @@
                     });
                     return
                 }
-                return this.$axios.post(this.$api.addApiApi, {
-                    'moduleId': this.form.moduleId,
-                    'projectId': this.form.projectId,
-                    'apiMsgName': this.apiMsgData.name,
-                    'num': this.apiMsgData.num,
-                    // 'choiceUrl': this.form.choiceUrl,
-                    'choiceUrl': this.proUrlData[this.form.projectId].indexOf(this.form.choiceUrl),
-                    'variableType': this.form.choiceType,
+
+                if (this.apiMsgData.id == null) {
+                    // 添加接口
+                    return this.$axios.post(this.$api.InterfaceApi, {
+                    'module_id': this.form.moduleId,
+                    'project_id': this.form.projectId,
+                    'name': this.apiMsgData.name,
+                    // 'num': this.apiMsgData.num,
+                    'base_url': this.form.choiceUrl,
+                    // 'choiceUrl': this.proUrlData[this.form.projectId].indexOf(this.form.choiceUrl),
+                    'variable_type': this.form.choiceType,
                     'desc': this.apiMsgData.desc,
-                    'funcAddress': this.apiMsgData.funcAddress,
-                    'upFunc': this.apiMsgData.upFunc,
-                    'downFunc': this.apiMsgData.downFunc,
+                    // 'funcAddress': this.apiMsgData.funcAddress,
+                    'up_func': this.apiMsgData.upFunc,
+                    'down_func': this.apiMsgData.downFunc,
                     'url': this.apiMsgData.url,
                     'skip': this.apiMsgData.skip,
-                    'apiMsgId': this.apiMsgData.id,
-                    'param': JSON.stringify(this.apiMsgData.param),
-                    'header': JSON.stringify(this.apiMsgData.header),
-                    'variable': JSON.stringify(this.apiMsgData.variable),
+                    // 'apiMsgId': this.apiMsgData.id,
+                    'params': JSON.stringify(this.apiMsgData.param),
+                    'headers': JSON.stringify(this.apiMsgData.header),
+                    'dataVariable': JSON.stringify(this.apiMsgData.variable),
                     'jsonVariable': this.apiMsgData.jsonVariable,
                     'extract': JSON.stringify(this.apiMsgData.extract),
                     'method': this.apiMsgData.method,
@@ -594,11 +634,10 @@
                 }).then((response) => {
                         if (messageClose) {
                             return response
-
                         } else {
                             if (this.messageShow(this, response)) {
-                                this.apiMsgData.id = response.data['api_msg_id'];
-                                this.apiMsgData.num = response.data['num'];
+                                this.apiMsgData.id = response.data['id'];
+                                // this.apiMsgData.num = response.data['num'];
                                 // this.$emit('findApiMsg');
                                 return true
                             }
@@ -606,12 +645,93 @@
 
                     }
                 )
+                }
+                else {
+                    // 修改接口
+                    return this.$axios.put(this.$api.InterfaceApi + this.apiMsgData.id + '/', {
+                    'module_id': this.form.moduleId,
+                    'project_id': this.form.projectId,
+                    'name': this.apiMsgData.name,
+                    // 'num': this.apiMsgData.num,
+                    'base_url': this.form.choiceUrl,
+                    // 'choiceUrl': this.proUrlData[this.form.projectId].indexOf(this.form.choiceUrl),
+                    'variable_type': this.form.choiceType,
+                    'desc': this.apiMsgData.desc,
+                    // 'funcAddress': this.apiMsgData.funcAddress,
+                    'up_func': this.apiMsgData.upFunc,
+                    'down_func': this.apiMsgData.downFunc,
+                    'url': this.apiMsgData.url,
+                    'skip': this.apiMsgData.skip,
+                    'params': JSON.stringify(this.apiMsgData.param),
+                    'headers': JSON.stringify(this.apiMsgData.header),
+                    'dataVariable': JSON.stringify(this.apiMsgData.variable),
+                    'jsonVariable': this.apiMsgData.jsonVariable,
+                    'extract': JSON.stringify(this.apiMsgData.extract),
+                    'method': this.apiMsgData.method,
+                    'validate': JSON.stringify(this.apiMsgData.validate)
+                }).then((response) => {
+                        if (messageClose) {
+                            return response
+                        } else {
+                            if (this.messageShow(this, response)) {
+                                this.apiMsgData.id = response.data['id'];
+                                // this.apiMsgData.num = response.data['num'];
+                                this.$emit('findApiMsg');
+                                return true
+                            }
+                        }
+
+                    }
+                )
+                }
+
             },
+            // addApi(messageClose) {
+            //
+            // },
+            // eidtApi(messageClose) {
+            //     // 修改接口
+            //     this.$axios.put(this.$api.InterfaceApi + this.apiMsgData.id + '/', {
+            //         'module_id': this.form.moduleId,
+            //         'project_id': this.form.projectId,
+            //         'name': this.apiMsgData.name,
+            //         // 'num': this.apiMsgData.num,
+            //         'base_url': this.form.choiceUrl,
+            //         // 'choiceUrl': this.proUrlData[this.form.projectId].indexOf(this.form.choiceUrl),
+            //         'variable_type': this.form.choiceType,
+            //         'desc': this.apiMsgData.desc,
+            //         // 'funcAddress': this.apiMsgData.funcAddress,
+            //         'up_func': this.apiMsgData.upFunc,
+            //         'down_func': this.apiMsgData.downFunc,
+            //         'url': this.apiMsgData.url,
+            //         'skip': this.apiMsgData.skip,
+            //         'params': JSON.stringify(this.apiMsgData.param),
+            //         'headers': JSON.stringify(this.apiMsgData.header),
+            //         'dataVariable': JSON.stringify(this.apiMsgData.variable),
+            //         'jsonVariable': this.apiMsgData.jsonVariable,
+            //         'extract': JSON.stringify(this.apiMsgData.extract),
+            //         'method': this.apiMsgData.method,
+            //         'validate': JSON.stringify(this.apiMsgData.validate)
+            //     }).then((response) => {
+            //             if (messageClose) {
+            //                 return response
+            //             } else {
+            //                 if (this.messageShow(this, response)) {
+            //                     this.apiMsgData.id = response.data['id'];
+            //                     // this.apiMsgData.num = response.data['num'];
+            //                     this.$emit('findApiMsg');
+            //                     return true
+            //                 }
+            //             }
+            //
+            //         }
+            //     )
+            // },
             editCopyApiMsg(apiMsgId, status) {
-                this.$axios.post(this.$api.editAndCopyApiApi, {'apiMsgId': apiMsgId}).then((response) => {
-                        this.apiMsgData.name = response.data['data']['name'];
+                this.$axios.get(this.$api.InterfaceApi + apiMsgId + '/').then((response) => {
+                        this.apiMsgData.name = response.data['name'];
                         if (status === 'edit') {
-                            this.apiMsgData.num = response.data['data']['num'];
+                            // this.apiMsgData.num = response.data['data']['num'];
                             this.apiMsgData.id = apiMsgId;
                         } else {
                             this.apiMsgData.num = '';
@@ -627,46 +747,57 @@
                         // }
 
 
-                        this.apiMsgData.variable = response.data['data']['variable'];
-                        if (!response.data['data']['json_variable']) {
+                        this.apiMsgData.variable = JSON.parse(response.data['dataVariable']);
+                        if (!response.data['jsonVariable']) {
                             this.apiMsgData.jsonVariable = ''
                         } else {
-                            this.apiMsgData.jsonVariable = response.data['data']['json_variable'];
+                            this.apiMsgData.jsonVariable = response.data['jsonVariable'];
                         }
-
-                        this.apiMsgData.desc = response.data['data']['desc'];
-                        this.apiMsgData.funcAddress = response.data['data']['funcAddress'];
-                        this.apiMsgData.upFunc = response.data['data']['up_func'];
-                        this.apiMsgData.downFunc = response.data['data']['down_func'];
-                        this.apiMsgData.url = response.data['data']['url'];
-                        this.apiMsgData.skip = response.data['data']['skip'];
-                        this.apiMsgData.header = response.data['data']['header'];
-                        this.form.choiceType = response.data['data']['variableType'];
-                        this.apiMsgData.param = response.data['data']['param'];
-                        this.apiMsgData.extract = response.data['data']['extract'];
-                        this.apiMsgData.validate = response.data['data']['validate'];
-                        this.apiMsgData.method = response.data['data']['method'];
-                        this.form.choiceUrl = this.proUrlData[this.projectId][response.data['data']['status_url']];
                         this.form.projectId = this.projectId;
                         this.form.moduleId = this.moduleId;
+                        this.apiMsgData.method = response.data['method'];
+                        this.form.choiceUrl = response.data['base_url'];
+                        this.apiMsgData.desc = response.data['desc'];
+                        // this.apiMsgData.funcAddress = response.data['funcAddress'];
+                        this.apiMsgData.upFunc = response.data['up_func'];
+                        this.apiMsgData.downFunc = response.data['down_func'];
+                        this.apiMsgData.url = response.data['url'];
+                        this.apiMsgData.skip = response.data['skip'];
+                        this.apiMsgData.header = JSON.parse(response.data['headers']);
+                        this.form.choiceType = response.data['variable_type'];
+                        this.apiMsgData.param = JSON.parse(response.data['params']);
+                        this.apiMsgData.extract = JSON.parse(response.data['extract']);
+                        this.apiMsgData.validate = JSON.parse(response.data['validate']);
+
+
+                        // this.form.choiceUrl = this.proUrlData[this.projectId][response.data['data']['status_url']];
+
                     }
                 );
             },
             saveAndRun() {
                 //  保存并执行接口
+                // console.log(this.addApiMsg(true));
+
                 this.addApiMsg(true).then(res => {
                     //  先判断保存是否成功，再决定是否执行接口
-                    if (res.data['status'] === 0) {
-                        this.$message({
-                            showClose: true,
-                            message: res.data['msg'],
-                            type: 'warning',
-                        });
-                    } else {
-                        this.apiMsgData.id = res.data['api_msg_id'];
-                        this.apiMsgData.num = res.data['num'];
-                        this.$emit('apiTest', [{'apiMsgId': res.data['api_msg_id'], 'num': '1'}], false);
-                    }
+                    // if (res.data['status'] === 0) {
+                    //     this.$message({
+                    //         showClose: true,
+                    //         message: res.data['msg'],
+                    //         type: 'warning',
+                    //     });
+                    // } else {
+                    //     this.apiMsgData.id = res.data['id'];
+                    //     // this.apiMsgData.num = res.data['num'];
+                    //     this.$emit('apiTest', [{'apiMsgId': res.data['api_msg_id'], 'num': '1'}], false);
+                    // }
+
+                    this.apiMsgData.id = res.data['id'];
+                    console.log(this.apiMsgData.id);
+                    console.log('++++++++++++++++++');
+
+                    this.$emit('apiTest', {'apiMsgId': res.data['id']}, false);
                 });
             },
             resetLine() {
