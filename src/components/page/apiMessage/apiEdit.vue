@@ -434,7 +434,7 @@
                     choiceType: 'data',
                 },
                 comparators: [
-                    {'value': 'equals'}, {'value': 'less_than'},
+                    {'value': 'eq'},{'value': 'equals'}, {'value': 'less_than'},
                     {'value': 'less_than_or_equals'}, {'value': 'length_less_than_or_equals'},
                     {'value': 'greater_than'}, {'value': 'greater_than_or_equals'},
                     {'value': 'not_equals'}, {'value': 'length_less_than'},
