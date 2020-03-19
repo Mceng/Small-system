@@ -73,14 +73,19 @@
                                 index: 'projectslist',
                                 title: '项目列表'
                             },
-                            // {
-                            //     index: 'moduleManage',
-                            //     title: '模块管理'
-                            // },
+                            {
+                                index: 'debugtalk',
+                                title: '函数管理'
+                            },
+
                             {
                                 index: 'apiMessage',
                                 title: '接口管理'
-                            }
+                            },
+                            {
+                                index: 'caseMessage',
+                                title: '用例管理'
+                            },
                         ]
                     },
                     {
@@ -98,35 +103,22 @@
                             }
                         ]
                     },
+                    // {
+                    //     icon: 'el-icon-menu',
+                    //     index: '5',
+                    //     title: '内置函数',
+                    //     subs: [
+                    //         {
+                    //             index: 'debugtalkslist',
+                    //             title: '函数列表'
+                    //         },
+                    //         {
+                    //             index: 'debugtalksadd',
+                    //             title: '函数'
+                    //         }
+                    //     ]
+                    // },
                     {
-                        icon: 'el-icon-menu',
-                        index: '5',
-                        title: '内置函数',
-                        subs: [
-                            {
-                                index: 'debugtalkslist',
-                                title: '函数列表'
-                            },
-                            {
-                                index: 'debugtalksadd',
-                                title: '函数'
-                            }
-                        ]
-                    },
-                    {
-                        icon: 'el-icon-s-check  ',
-                        index: '6',
-                        title: '接口管理',
-                        subs: [
-                            {
-                                index: 'interfaceslist',
-                                title: '接口列表'
-                            },{
-                                index: 'interfacesadd',
-                                title: '新增接口'
-                            }
-                        ]
-                    },{
                         icon: 'el-icon-s-data',
                         index: '7',
                         title: '用例管理',

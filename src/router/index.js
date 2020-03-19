@@ -28,14 +28,18 @@ export default new Router({
                 },
 
                 {
-                    path: '/moduleManage',
-                    component: () => import('../components/page/module/module.vue'),
-                    meta: { title: '模块管理' }
-                },
-                {
                     path: '/apiMessage',
                     component: () => import('../components/page/apiMessage/apiMsg.vue'),
-                    meta: { title: '模块管理' }
+                    meta: { title: '接口管理' }
+                },
+                                {
+                    path: '/caseMessage',
+                    component: () => import('../components/page/caseManage/case.vue'),
+                    meta: { title: '用例管理' }
+                },              {
+                    path: '/caseMessage',
+                    component: () => import('../components/page/caseManage/case.vue'),
+                    meta: { title: '用例管理' }
                 },
 
 
@@ -63,8 +67,8 @@ export default new Router({
                     meta: { title: '函数列表' }
                 },
                 {
-                    path: '/debugtalksadd',
-                    component: () => import('../components/page/buildInFunc'),
+                    path: '/debugtalk',
+                    component: () => import('../components/page/debugtalk'),
                     meta: { title: '函数列表' }
                 },
                 {
