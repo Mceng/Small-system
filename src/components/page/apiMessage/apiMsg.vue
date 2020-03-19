@@ -15,19 +15,19 @@
                     </el-option>
                 </el-select>
                 <!--<el-select-->
-                        <!--v-model="form.configId"-->
-                        <!--placeholder="请选择配置"-->
-                        <!--clearable-->
-                        <!--value-key="configId"-->
-                        <!--style="width: 150px"-->
+                <!--v-model="form.configId"-->
+                <!--placeholder="请选择配置"-->
+                <!--clearable-->
+                <!--value-key="configId"-->
+                <!--style="width: 150px"-->
                 <!--&gt;-->
-                    <!--<el-option-->
+                <!--<el-option-->
 
-                            <!--v-for="item in configData[form.projectId]"-->
-                            <!--:key="item.configId"-->
-                            <!--:label="item.name"-->
-                            <!--:value="item.configId">-->
-                    <!--</el-option>-->
+                <!--v-for="item in configData[form.projectId]"-->
+                <!--:key="item.configId"-->
+                <!--:label="item.name"-->
+                <!--:value="item.configId">-->
+                <!--</el-option>-->
                 <!--</el-select>-->
             </el-form-item>
 
@@ -325,8 +325,8 @@
                     this.initModuleData()
                 } else if (command === 'edit') {
                     this.editModule()
-                } else if (command === 'stick') {
-                    this.stickModule()
+                    // } else if (command === 'stick') {
+                    //     this.stickModule()
                 } else if (command === 'del') {
                     this.sureView(this.delModule, null, this.form.module.name)
                 }
@@ -351,7 +351,8 @@
                     });
                     return
                 }
-                this.$axios.get(this.$api.InterfaceApi, { params: {
+                this.$axios.get(this.$api.InterfaceApi, {
+                    params: {
                         'project_id': this.form.projectId,
                         'module_id': this.form.module.id,
                         'page': this.apiMsgPage.currentPage,
@@ -419,10 +420,10 @@
                         } else {
                             this.$message({
                                 showClose: true,
-                                message: response.data['msg'],
+                                message: response.data,
                                 type: 'success',
                             });
-                            this.$refs.resultFunc.showData(response['data']['data']);
+                            this.$refs.resultFunc.showData(response.data);
                         }
                         this.loading = false;
                     }
@@ -459,16 +460,15 @@
                             this.moduleDataList = response.data['results'];
                             this.modulePage.total = response.data['count'];
                             this.proModelData = response.data['results'];
-                            if(this.moduleDataList.length !== 0){
+                            if (this.moduleDataList.length !== 0) {
                                 this.form.module = this.moduleDataList[0];
                                 this.$nextTick(function () {
                                     this.$refs.testTree.setCurrentKey(this.form.module.id);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
                                 });
                                 this.findApiMsg();
-                            }else {
+                            } else {
                                 this.ApiMsgTableData = []
                             }
-
 
 
                         }
@@ -496,7 +496,7 @@
                 //  打开窗口时，初始化模块窗口数据
                 this.moduleData.name = '';
                 this.moduleData.id = '';
-                this.moduleData.num = '';
+                // this.moduleData.num = '';
                 this.moduleData.viewStatus = true;
             },
             editModule() {
@@ -510,28 +510,43 @@
                     return
                 }
                 this.moduleData.name = this.form.module.name;
-                this.moduleData.id = this.form.module.moduleId;
-                this.moduleData.num = this.form.module.num;
+                this.moduleData.id = this.form.module.id;
                 this.moduleData.viewStatus = true;
             },
             addModule() {
                 //  添加模块
-                this.$axios.post(this.$api.addModuleApi, {
-                    'projectId': this.form.projectId,
-                    'name': this.moduleData.name,
-                    'id': this.moduleData.id,
-                    'num': this.moduleData.num,
-                }).then((response) => {
-                        if (this.messageShow(this, response)) {
-                            this.moduleData.viewStatus = false;
-                            this.findModule();
+                if (this.moduleData.id) {
+                    this.data = {
+                        'project_id': this.form.projectId,
+                        'id': this.moduleData.id,
+                        'name': this.moduleData.name,
+                    };
+                    this.$axios.put(this.$api.putModule + this.moduleData.id + '/', this.data)
+                        .then((response) => {
+                                this.form.projectId = response.data['project_id'];
+                                this.moduleData.viewStatus = false;
+                                this.findModule();
+                            }
+                        );
+                } else {
+                    this.$axios.post(this.$api.Modules, {
+                        'project_id': this.form.projectId,
+                        'name': this.moduleData.name,
+                    }).then((response) => {
+                            if (this.messageShow(this, response)) {
+                                this.moduleData.viewStatus = false;
+                                this.findModule();
+                            }
                         }
-                    }
-                )
+                    )
+
+
+                }
+
             },
             delModule() {
                 //  删除模块
-                this.$axios.post(this.$api.delModuleApi, {'id': this.form.module.moduleId}).then((response) => {
+                this.$axios.delete(this.$api.Modules + this.form.module.id + '/').then((response) => {
                         this.messageShow(this, response);
                         this.moduleData.name = '';
                         if ((this.modulePage.currentPage - 1) * this.modulePage.sizePage + 1 === this.modulePage.total) {

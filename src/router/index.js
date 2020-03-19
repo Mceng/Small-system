@@ -73,17 +73,6 @@ export default new Router({
                     meta: { title: '函数修改' }
                 },
                 {
-                    path: '/interfaceslist',
-                    component: () => import('../components/page/InterfacesList'),
-                    meta: { title: '接口列表' }
-                },
-                {
-                    path: '/interfacesadd',
-                    component: () => import('../components/page/InterfacesAdd'),
-                    meta: { title: '新增接口' }
-                },
-
-                {
                     path: '/testcaseslist',
                     component: () => import('../components/page/TestcasesList'),
                     meta: { title: '用例列表' }

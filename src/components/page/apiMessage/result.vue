@@ -48,9 +48,8 @@
                                 </div>
                             </div>
                         </el-tab-pane>
-                        <el-tab-pane label="提取信息" v-if="JSON.stringify(item.meta_datas.data[0].extract_msgs) !== '{}'">
-                            <div v-for="(value, key) in item.meta_datas.data[0].extract_msgs"
-                                 :key="key">
+                        <el-tab-pane label="提取信息" v-if="JSON.stringify(item.meta_datas.validators[0]) !== '{}'">
+                            <div v-for="(value, key) in item.meta_datas.validators[0]" :key="key">
                                 <div style="color: #409eff"
                                      v-if="JSON.stringify(value) !== '{}' && key !== 'start_timestamp' && value && key !== 'json'">
                                     {{ key }}：
@@ -101,7 +100,7 @@
                             attachment: null,
                             meta_datas: {
                                 data: [{
-                                    extract_msgs:{},
+                                    // extract_msgs:{},
                                     request: {
                                         body: null,
                                         url: null,
@@ -110,8 +109,11 @@
                                         params: null,
                                         json: null
                                     },
-                                    response: {content: null, json: null}
-                                }]
+                                    response: {status_code: null, json: null,ok:null},
+
+                                }],
+                                validators:{}
+
                             },
                         },
                     ],
