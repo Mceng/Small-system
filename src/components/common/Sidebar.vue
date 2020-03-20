@@ -74,6 +74,10 @@
                                 title: '项目列表'
                             },
                             {
+                                index: 'envMessage',
+                                title: '新增环境'
+                            },
+                            {
                                 index: 'debugtalk',
                                 title: '函数管理'
                             },
@@ -88,21 +92,21 @@
                             },
                         ]
                     },
-                    {
-                        icon: 'el-icon-s-order',
-                        index: '4',
-                        title: '环境管理',
-                        subs: [
-                            {
-                                index: 'envslist',
-                                title: '环境列表'
-                            },
-                            {
-                                index: 'envsadd',
-                                title: '新增环境'
-                            }
-                        ]
-                    },
+                    // {
+                    //     icon: 'el-icon-s-order',
+                    //     index: '4',
+                    //     title: '环境管理',
+                    //     subs: [
+                    //         {
+                    //             index: 'envslist',
+                    //             title: '环境列表'
+                    //         },
+                    //         {
+                    //             index: 'envsadd',
+                    //             title: '新增环境'
+                    //         }
+                    //     ]
+                    // },
                     // {
                     //     icon: 'el-icon-menu',
                     //     index: '5',

@@ -36,10 +36,11 @@ export default new Router({
                     path: '/caseMessage',
                     component: () => import('../components/page/caseManage/case.vue'),
                     meta: { title: '用例管理' }
-                },              {
-                    path: '/caseMessage',
-                    component: () => import('../components/page/caseManage/case.vue'),
-                    meta: { title: '用例管理' }
+                },
+                {
+                    path: '/envMessage',
+                    component: () => import('../components/page/env/Envs.vue'),
+                    meta: { title: '环境管理' }
                 },
 
 

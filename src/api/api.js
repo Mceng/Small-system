@@ -43,6 +43,8 @@ const putModule = host+'/modules/';
 
 const Debugtalk = host+'/debugtalks/';
 
+const Envs = host+'/envs/';
+
 
 
 
@@ -69,5 +71,6 @@ export default {
     Modules,
     InterfaceApi,
     Debugtalk,
+    Envs,
 
 }
