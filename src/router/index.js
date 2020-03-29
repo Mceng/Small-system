@@ -42,6 +42,11 @@ export default new Router({
                     component: () => import('../components/page/env/Envs.vue'),
                     meta: { title: '环境管理' }
                 },
+                {
+                    path: '/debugtalk',
+                    component: () => import('../components/page/debugtalk/debugtalk'),
+                    meta: { title: '函数列表' }
+                },
 
 
 
@@ -67,11 +72,7 @@ export default new Router({
                     component: () => import('../components/page/DebugtalksList'),
                     meta: { title: '函数列表' }
                 },
-                {
-                    path: '/debugtalk',
-                    component: () => import('../components/page/debugtalk'),
-                    meta: { title: '函数列表' }
-                },
+
                 {
                     path: '/debugtalkedit',
                     component: () => import('../components/page/DebugtalkEdit'),

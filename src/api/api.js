@@ -1,16 +1,19 @@
 import axios from 'axios';
 
 const host = 'http://127.0.0.1:9000';
-
-export const login = params => {return axios.post('${host}/user/login/',params)};
-
-
-export const addproject = params => {return axios.post('${host}/projects/',params)};
-
-export const get_projects = () => {return axios.get('${host}/projects/')};
+// const host = 'http://47.106.12.217:39002';
 
 
 
+// export const login = params => {return axios.post('${host}/user/login/',params)};
+//
+//
+// export const addproject = params => {return axios.post('${host}/projects/',params)};
+//
+// export const get_projects = () => {return axios.get('${host}/projects/')};
+
+
+const Login = host+'/user/login/';
 
 
 // 公共
@@ -18,6 +21,7 @@ const getProName = host+'/projects/names/';
 
 
 // 项目
+
 
 const ProjectsApi = host+'/projects/';
 const addprojects = host+'/projects/';
@@ -56,6 +60,7 @@ const InterfaceApi = host+'/interfaces/';
 
 
 export default {
+    Login,
     ProjectsApi,
     getProName,
     addprojects,

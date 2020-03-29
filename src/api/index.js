@@ -2,6 +2,7 @@ import request from '../utils/request';
 
 
 const host='http://127.0.0.1:9000';
+// const host = 'http://47.106.12.217:39002';
 
 export default {
   host

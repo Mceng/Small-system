@@ -16,9 +16,10 @@ import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';
-import Global from './components/common/Global'
 
-Vue.prototype.Global = Global;
+
+// import Global from './components/common/Global'
+// Vue.prototype.Global = Global;
 
 
 Vue.config.productionTip = false;

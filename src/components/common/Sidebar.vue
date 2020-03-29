@@ -136,32 +136,32 @@
                             }
                         ]
                     },
-                    {
-                        icon: 'el-icon-s-tools',
-                        index: '8',
-                        title: '配置管理',
-                        subs: [
-                            {
-                                index: 'configurslist',
-                                title: '配置列表'
-                            },
-                            {
-                                index: 'configuresedit',
-                                title: '新增配置'
-                            }
-                        ]
-                    },
-                    {
-                        icon: 'el-icon-lx-calendar',
-                        index: '9',
-                        title: '套件管理',
-                        subs: [
-                            {
-                                index: 'testsuitslist',
-                                title: '套件列表'
-                            }
-                        ]
-                    },
+                    // {
+                    //     icon: 'el-icon-s-tools',
+                    //     index: '8',
+                    //     title: '配置管理',
+                    //     subs: [
+                    //         {
+                    //             index: 'configurslist',
+                    //             title: '配置列表'
+                    //         },
+                    //         {
+                    //             index: 'configuresedit',
+                    //             title: '新增配置'
+                    //         }
+                    //     ]
+                    // },
+                    // {
+                    //     icon: 'el-icon-lx-calendar',
+                    //     index: '9',
+                    //     title: '套件管理',
+                    //     subs: [
+                    //         {
+                    //             index: 'testsuitslist',
+                    //             title: '套件列表'
+                    //         }
+                    //     ]
+                    // },
 
 
 
@@ -250,11 +250,11 @@
                     //         }
                     //     ]
                     // },
-                    {
-                        icon: 'el-icon-lx-redpacket_fill',
-                        index: '/donate',
-                        title: '支持作者'
-                    }
+                    // {
+                    //     icon: 'el-icon-lx-redpacket_fill',
+                    //     index: '/donate',
+                    //     title: '支持作者'
+                    // }
                 ]
             };
         },

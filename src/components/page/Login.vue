@@ -32,8 +32,6 @@
 </template>
 
 <script>
-    import {login} from '../../api/api';
-    import axios from 'axios';
 
     export default {
         data: function () {
@@ -55,7 +53,7 @@
                 this.$refs.login.validate((valid) => {
                     if (valid) {
                         // login(this.param)
-                        axios.post('http://127.0.0.1:9000/user/login/', this.param)
+                        this.$axios.post(this.$api.Login, this.param)
                             .then(response => {
                                 if (that.remember_me) {
                                     // 记住登录
