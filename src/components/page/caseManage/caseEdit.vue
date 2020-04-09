@@ -26,10 +26,10 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="用例编号" :label-width="caseData.formLabelWidth" v-if="caseData.id">
-                        <el-input v-model.number="caseData.num" :minlength="215" style="width: 130px">
-                        </el-input>
-                    </el-form-item>
+                    <!--<el-form-item label="用例编号" :label-width="caseData.formLabelWidth" v-if="caseData.id">-->
+                    <!--<el-input v-model.number="caseData.num" :minlength="215" style="width: 130px">-->
+                    <!--</el-input>-->
+                    <!--</el-form-item>-->
                 </el-form>
                 <el-form :inline="true" size="small">
                     <el-form-item label="用例描述" :label-width="caseData.formLabelWidth">
@@ -41,17 +41,17 @@
                         <el-select v-model="caseData.setId" placeholder="请选择用例集" value-key="id"
                                    style="width: 150px">
                             <el-option
-                                    v-for="item in allSetList[caseData.projectId]"
+                                    v-for="item in allSetList"
                                     :key="item.id"
-                                    :label="item.label"
+                                    :label="item.name"
                                     :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="执行次数" label-width="70px">
-                        <el-input-number v-model="caseData.times" :min="1" :max="1000">
-                        </el-input-number>
-                    </el-form-item>
+                    <!--<el-form-item label="执行次数" label-width="70px">-->
+                    <!--<el-input-number v-model="caseData.times" :min="1" :max="1000">-->
+                    <!--</el-input-number>-->
+                    <!--</el-form-item>-->
                 </el-form>
                 <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
                 <el-form :inline="true" class="demo-form-inline " size="small">
@@ -66,28 +66,27 @@
                         <!--                                </el-option>-->
                         <!--                            </el-select>-->
 
-                        <el-select v-model="caseData.environment" clearable value-key="configId" placeholder="默认项目环境"
-                                   style="width: 150px;padding-right:5px">
-                            <el-option
-                                    v-for="item in environmentList"
-                                    :key="item"
+                        <!--<el-select v-model="caseData.environment" clearable value-key="configId" placeholder="默认项目环境"-->
+                        <!--style="width: 150px;padding-right:5px">-->
+                        <!--<el-option-->
+                        <!--v-for="item in environmentList"-->
+                        <!--:key="item"-->
 
-                                    :value="item">
-                            </el-option>
-                        </el-select>
+                        <!--:value="item">-->
+                        <!--</el-option>-->
+                        <!--</el-select>-->
 
-                        <el-select v-model="caseData.funcAddress" multiple placeholder="请选择导入函数文件" size="small">
-                            <el-option
-                                    v-for="item in this.funcAddress"
-                                    :key="item['value']"
-                                    :label="item['value']"
-                                    :value="item['value']">
-                            </el-option>
-                        </el-select>
+                        <!--<el-select v-model="caseData.funcAddress" multiple placeholder="请选择导入函数文件" size="small">-->
+                        <!--<el-option-->
+                        <!--v-for="item in this.funcAddress"-->
+                        <!--:key="item['value']"-->
+                        <!--:label="item['value']"-->
+                        <!--:value="item['value']">-->
+                        <!--</el-option>-->
+                        <!--</el-select>-->
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" size="small" @click="configShow=true">加载配置
-                        </el-button>
+                        <!--<el-button type="primary" size="small" @click="configShow=true">加载配置</el-button>-->
                         <el-button type="primary" size="small"
                                    @click="addConfigVariable()">添加变量
                         </el-button>
@@ -118,13 +117,13 @@
                             </el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column property="value" label="操作" header-align="center" width="140">
+                    <el-table-column property="value" label="操作" header-align="center" width="180">
                         <template slot-scope="scope">
                             <el-button-group>
-                                <el-button type="info" icon="my-icon-jiantou-xiangshang"
+                                <el-button type="info" icon="el-icon-caret-top"
                                            @click.native="upNum(scope.$index)" size="mini">{{null}}
                                 </el-button>
-                                <el-button type="info" icon="my-icon-jiantou-xiangxia"
+                                <el-button type="info" icon="el-icon-caret-bottom"
                                            @click.native="downNum(scope.$index)" size="mini">{{null}}
                                 </el-button>
                                 <el-button type="danger" size="mini"
@@ -157,16 +156,16 @@
                             <el-col :span="4">
                                 接口名称
                             </el-col>
-                            <el-col :span="4">
-                                次数
-                            </el-col>
+                            <!--<el-col :span="4">-->
+                            <!--次数-->
+                            <!--</el-col>-->
                             <el-col :span="6" style="padding-left: 50px;">
                                 操作
                             </el-col>
                             <el-col :span="2">
                                 <div @click.prevent="showApiData" style="color: #55a9ff">
                                     <i class="my-icon-xiangzuo-copy" v-show="!showApiDataStatus"></i>
-                                    <i class="my-icon-xiangyou" v-show="showApiDataStatus"></i>
+                                    <i class="my-icon-xiangyou" v-show="showApiDataStatus">添加接口</i>
                                 </div>
                             </el-col>
                         </el-row>
@@ -188,12 +187,12 @@
                                             style="padding-top: 3px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;text-align:center">
                                         {{ _data.name }}
                                     </el-col>
-                                    <el-col :span="4">
-                                        <el-input-number size="mini" :precision="0"
-                                                         v-model="caseData.apiCases[index]['time']"
-                                                         :min="1" :max="1000">
-                                        </el-input-number>
-                                    </el-col>
+                                    <!--<el-col :span="4">-->
+                                    <!--<el-input-number size="mini" :precision="0"-->
+                                    <!--v-model="caseData.apiCases[index]['time']"-->
+                                    <!--:min="1" :max="1000">-->
+                                    <!--</el-input-number>-->
+                                    <!--</el-col>-->
                                     <el-col :span="1">
                                     </el-col>
                                     <el-col :span="8" style="padding-left: 50px;padding-top: 3px">
@@ -233,15 +232,15 @@
                                                    style="width: 150px;padding-right:5px"
                                                    placeholder="请选择模块">
                                             <el-option
-                                                    v-for="item in proModelData[form.projectId]"
-                                                    :key="item.moduleId"
+                                                    v-for="item in proModelData"
+                                                    :key="item.id"
                                                     :label="item.name"
-                                                    :value="item.moduleId">
+                                                    :value="item.id">
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
                                     <el-form-item label="">
-                                        <el-input placeholder="请输入用例" v-model="form.apiName" style="width: 150px">
+                                        <el-input placeholder="请输入接口关键字" v-model="form.apiName" style="width: 150px">
                                         </el-input>
                                     </el-form-item>
                                     <el-form-item>
@@ -280,7 +279,7 @@
                                 >
                                     <transition-group name="list-complete">
                                         <div v-for="(_data, index) in ApiMsgData"
-                                             :key="_data.num"
+                                             :key="_data.id"
                                              class="list-complete-item">
                                             <el-row :gutter="24">
                                                 <el-col :span="1">
@@ -296,7 +295,7 @@
                                                     <!--</el-checkbox>-->
                                                 </el-col>
                                                 <el-col :span="2">
-                                                    {{ _data.num }}
+                                                    {{ _data.id }}
                                                 </el-col>
                                                 <el-col :span="4"
                                                         style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
@@ -524,72 +523,112 @@
                 // if (this.projectName) {
                 //     this.synchronousData();
                 // }
+
+                this.caseData.projectId = this.projectId;
                 this.form.projectId = this.projectId;
-                this.form.moduleId = this.proModelData[this.form.projectId][0].moduleId;
+                this.form.moduleId = this.proModelData[0]['id'];
                 this.caseData.apiCases = [];
                 this.caseData.variable = [{key: '', value: '', remark: ''}];
                 this.caseData.name = '';
                 this.caseData.times = '';
                 this.caseData.desc = '';
                 this.caseData.id = '';
-                this.caseData.environment = '';
-                this.caseData.funcAddress = Array();
-                this.caseData.num = '';
-                this.caseData.setId = this.currentSetId;
+                // this.caseData.environment = '';
+                // this.caseData.funcAddress = Array();
+                // this.caseData.num = '';
+                // this.caseData.setId = this.currentSetId;
+                // this.caseData.setId = this.allSetList[0]['id'];
+
+                if (this.allSetList) {
+                    this.caseData.setId = this.allSetList[0]['id'];
+                } else {
+                    this.caseData.setId = null
+                }
+
                 this.caseData.modelFormVisible = true;
                 this.caseData.projectId = this.projectId;
                 this.apiMsgVessel = [];
                 this.findApiMsg();
             },
             editCase(caseId, copyEditStatus = false) {
-                this.$axios.post(this.$api.editCaseApi, {
-                    'caseId': caseId,
-                    'copyEditStatus': copyEditStatus
-                }).then((response) => {
-
+                this.$axios.get(this.$api.Testcases + caseId + '/').then((response) => {
                         this.form.projectId = this.projectId;
-                        this.form.moduleId = this.proModelData[this.form.projectId][0].moduleId;
+                        this.form.moduleId = this.proModelData[0]['id'];
                         this.caseData.projectId = this.projectId;
                         this.caseData.setId = this.currentSetId;
 
-                        this.caseData.name = response.data['data']['name'];
-                        this.caseData.desc = response.data['data']['desc'];
-                        this.caseData.times = response.data['data']['times'];
-                        this.caseData.funcAddress = response.data['data']['func_address'];
-                        this.caseData.apiCases = response.data['data']['cases'];
-                        this.caseData.variable = response.data['data']['variable'];
+                        this.caseData.name = response.data['name'];
+                        this.caseData.desc = response.data['desc'];
+                        // this.caseData.times = response.data['data']['times'];
+                        // this.caseData.funcAddress = response.data['data']['func_address'];
+                        this.caseData.apiCases = JSON.parse(response.data['cases']);
+                        this.caseData.variable = JSON.parse(response.data['variables']);
                         if (copyEditStatus) {
                             this.caseData.id = '';
-                            this.caseData.num = '';
                         } else {
                             this.caseData.id = caseId;
-                            this.caseData.num = response.data['data']['num'];
+                            // this.caseData.num = response.data['data']['num'];
+
                         }
                         this.caseData.modelFormVisible = true;
-                        this.caseData.environment = this.environmentList[response.data['data']['environment']];
+                        // this.caseData.environment = this.environmentList[response.data['data']['environment']];
+
                     }
                 )
             },
             changeSetChoice() {
-                let tempData = this.allSetList[this.caseData.projectId][0];
-                if (tempData) {
-                    this.caseData.setId = tempData.id;
+                // 当改变项目选择后重新显示集合用例集选择
+                if (this.allSetList) {
+                    this.$axios.get(this.$api.ProjectsApi + this.caseData.projectId + '/testsuits/', {
+                        params: {
+                            'page': 1,
+                            'size': 100,
+                        }
+                    }).then((response) => {
+                        this.allSetList = response.data['results'];
+                        if (this.allSetList) {
+                            this.caseData.setId = this.allSetList[0]['id'];
+                        } else {
+                            this.caseData.setId = null
+                        }
+
+                    });
+
                 } else {
                     this.caseData.setId = null
                 }
             },
             changeModuleChoice() {
-                let tempData = this.proModelData[this.form.projectId][0];
-                if (tempData) {
-                    this.form.moduleId = tempData.moduleId;
-                    this.apiMsgPage.currentPage = 1;
-                    this.apiMsgPage.sizePage = 15;
-                    this.findApiMsg();
-                } else {
-                    this.form.moduleId = null;
-                    this.ApiMsgData = [];
-                    this.apiMsgPage.total = 0;
-                }
+                // 添加步骤下的改变项目进行搜索
+                this.$axios.get(this.$api.getModules + this.form.projectId + /modules/, {
+                        params: {'page': 1, 'size': 100,}
+                    }
+                ).then((response) => {
+                    this.proModelData = response.data['results'];
+                    if (this.proModelData[0][id]) {
+                        this.form.moduleId = this.proModelData[0][id];
+                        this.apiMsgPage.currentPage = 1;
+                        this.apiMsgPage.sizePage = 15;
+                        this.findApiMsg();
+                    } else {
+                        this.form.moduleId = null;
+                        this.ApiMsgData = [];
+                        this.apiMsgPage.total = 0;
+                    }
+                });
+
+
+                // let tempData = this.proModelData[this.form.projectId][0];
+                // if (tempData) {
+                //     this.form.moduleId = tempData.moduleId;
+                //     this.apiMsgPage.currentPage = 1;
+                //     this.apiMsgPage.sizePage = 15;
+                //     this.findApiMsg();
+                // } else {
+                //     this.form.moduleId = null;
+                //     this.ApiMsgData = [];
+                //     this.apiMsgPage.total = 0;
+                // }
             },
             changeConfigChoice() {
                 // let tempData = this.configData[this.form.sceneVariableProjectName][0];
@@ -630,16 +669,17 @@
             delApiCase(i) {
                 //判断caseList中是否存在id，存在则在数据库删除信息，否则在前端删除临时数据
                 if ('id' in this.caseData.apiCases[i]) {
-                    this.$confirm('是否删除用例中已保存的步骤：' + '<strong style="color: red;">' + this.caseData.apiCases[i]['case_name'] + '</strong>' + '?', '提示', {
+                    this.$confirm('是否删除用例中已保存的步骤：' + '<strong style="color: red;">' + this.caseData.apiCases[i]['name'] + '</strong>' + '?', '提示', {
                         dangerouslyUseHTMLString: true,
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        this.$axios.post('/api/apiCase/del', {'id': this.caseData.apiCases[i]['id']}).then(() => {
-                                this.caseData.apiCases.splice(i, 1);
-                            }
-                        );
+                        this.caseData.apiCases.splice(i, 1);
+                        // this.$axios.post('/api/apiCase/del', {'id': this.caseData.apiCases[i]['id']}).then(() => {
+                        //         this.caseData.apiCases.splice(i, 1);
+                        //     }
+                        // );
                     }).catch(() => {
                     });
                 } else {
@@ -658,17 +698,20 @@
 
             findApiMsg() {
                 this.radio = false;
-                this.$axios.post(this.$api.findApiApi, {
-                    'projectId': this.form.projectId,
-                    'moduleId': this.form.moduleId,
-                    'apiName': this.form.apiName,
-                    'page': this.apiMsgPage.currentPage,
-                    'sizePage': this.apiMsgPage.sizePage,
+                this.$axios.get(this.$api.InterfaceApi, {
+                    params: {
+                        'project_id': this.form.projectId,
+                        'module_id': this.form.moduleId,
+                        // 'apiName': this.form.apiName,
+                        'page': this.apiMsgPage.currentPage,
+                        'size': this.apiMsgPage.sizePage,
+                    }
                 }).then((response) => {
+                        console.log(response);
                         if (this.messageShow(this, response)) {
                             this.radio = false;
-                            this.ApiMsgData = response.data['data'];
-                            this.apiMsgPage.total = response.data['total'];
+                            this.ApiMsgData = response.data['results'];
+                            this.apiMsgPage.total = response.data['count'];
 
                             this.isIndeterminate = false;
                             this.apiMsgVessel = [];
@@ -737,38 +780,55 @@
                     });
                     return
                 }
-                for (let i = 0; i < this.caseData.apiCases.length; i++) {
-                    if (!(/(^[1-9]\d*$)/.test(this.caseData.apiCases[i]['time']))) {
-                        this.$message({
-                            showClose: true,
-                            message: '第' + i + '条用例的执行次数请输入正整数',
-                            type: 'warning',
-                        });
-                        return
-                    }
-                }
+                // for (let i = 0; i < this.caseData.apiCases.length; i++) {
+                //     if (!(/(^[1-9]\d*$)/.test(this.caseData.apiCases[i]['time']))) {
+                //         this.$message({
+                //             showClose: true,
+                //             message: '第' + i + '条用例的执行次数请输入正整数',
+                //             type: 'warning',
+                //         });
+                //         return
+                //     }
+                // }
                 // console.log(this.environmentList.indexOf(this.caseData.environment));
-                this.$axios.post(this.$api.addCaseApi, {
-                    'num': this.caseData.num,
+                this.data = {
+                    // 'id': this.caseData.id,
+                    'testsuits_id': this.caseData.setId,
                     'name': this.caseData.name,
-                    'times': this.caseData.times,
-                    'caseSetId': this.caseData.setId,
                     'desc': this.caseData.desc,
-                    'environment': this.environmentList.indexOf(this.caseData.environment),
-                    'funcAddress': this.caseData.funcAddress,
-                    'variable': JSON.stringify(this.caseData.variable),
-                    'projectId': this.caseData.projectId,
-                    'ids': this.caseData.id,
-                    'apiCases': this.caseData.apiCases,
-                }).then((response) => {
-                        if (this.messageShow(this, response)) {
-                            //  不直接赋值的原因是，如果步骤是新的，还是赋值id给步骤，有点麻烦，还不如直接重新查询
-                            this.editCase(response.data['case_id'])
-                            // this.caseData.id = response.data['case_id'];
-                            // this.caseData.num = response.data['num'];
+                    // 'environment': this.environmentList.indexOf(this.caseData.environment),
+                    // 'funcAddress': this.caseData.funcAddress,
+                    'variables': JSON.stringify(this.caseData.variable),
+                    // 'projectId': this.caseData.projectId,
+                    // 'ids': this.caseData.id,
+                    'cases': JSON.stringify(this.caseData.apiCases),
+                    'author': 'admin'
+                };
+                if (this.caseData.id) {
+                    this.$axios.put(this.$api.Testcases + this.caseData.id + '/', this.data).then((response) => {
+                            if (this.messageShow(this, response)) {
+                                //  不直接赋值的原因是，如果步骤是新的，还是赋值id给步骤，有点麻烦，还不如直接重新查询
+                                this.editCase(response.data['id'])
+                                // this.caseData.id = response.data['case_id'];
+                                // this.caseData.num = response.data['num'];
+                            }
                         }
-                    }
-                )
+                    )
+                } else {
+                    this.$axios.post(this.$api.Testcases, this.data).then((response) => {
+                            if (this.messageShow(this, response)) {
+                                //  不直接赋值的原因是，如果步骤是新的，还是赋值id给步骤，有点麻烦，还不如直接重新查询
+                                this.editCase(response.data['id'])
+                                // this.caseData.id = response.data['case_id'];
+                                // this.caseData.num = response.data['num'];
+                            }
+                        }
+                    )
+                }
+                this.$confirm('保存成功!');
+
+
+
             },
         },
         computed: {

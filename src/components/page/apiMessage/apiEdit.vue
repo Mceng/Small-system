@@ -686,56 +686,14 @@
                 }
 
             },
-            // addApi(messageClose) {
-            //
-            // },
-            // eidtApi(messageClose) {
-            //     // 修改接口
-            //     this.$axios.put(this.$api.InterfaceApi + this.apiMsgData.id + '/', {
-            //         'module_id': this.form.moduleId,
-            //         'project_id': this.form.projectId,
-            //         'name': this.apiMsgData.name,
-            //         // 'num': this.apiMsgData.num,
-            //         'base_url': this.form.choiceUrl,
-            //         // 'choiceUrl': this.proUrlData[this.form.projectId].indexOf(this.form.choiceUrl),
-            //         'variable_type': this.form.choiceType,
-            //         'desc': this.apiMsgData.desc,
-            //         // 'funcAddress': this.apiMsgData.funcAddress,
-            //         'up_func': this.apiMsgData.upFunc,
-            //         'down_func': this.apiMsgData.downFunc,
-            //         'url': this.apiMsgData.url,
-            //         'skip': this.apiMsgData.skip,
-            //         'params': JSON.stringify(this.apiMsgData.param),
-            //         'headers': JSON.stringify(this.apiMsgData.header),
-            //         'dataVariable': JSON.stringify(this.apiMsgData.variable),
-            //         'jsonVariable': this.apiMsgData.jsonVariable,
-            //         'extract': JSON.stringify(this.apiMsgData.extract),
-            //         'method': this.apiMsgData.method,
-            //         'validate': JSON.stringify(this.apiMsgData.validate)
-            //     }).then((response) => {
-            //             if (messageClose) {
-            //                 return response
-            //             } else {
-            //                 if (this.messageShow(this, response)) {
-            //                     this.apiMsgData.id = response.data['id'];
-            //                     // this.apiMsgData.num = response.data['num'];
-            //                     this.$emit('findApiMsg');
-            //                     return true
-            //                 }
-            //             }
-            //
-            //         }
-            //     )
-            // },
             editCopyApiMsg(apiMsgId, status) {
                 this.$axios.get(this.$api.InterfaceApi + apiMsgId + '/').then((response) => {
                         this.apiMsgData.name = response.data['name'];
                         if (status === 'edit') {
-                            // this.apiMsgData.num = response.data['data']['num'];
                             this.apiMsgData.id = apiMsgId;
                         } else {
-                            this.apiMsgData.num = '';
-                            this.apiMsgData.id = '';
+                            this.apiMsgData.id = null;
+
                         }
                         // if (response.data['data']['variableType'] === 'data') {
                         //     this.apiMsgData.variable = response.data['data']['variable'];
@@ -1024,5 +982,8 @@
     }
 </script>
 <style>
-
+.el-upload--text{
+    width: 83px;
+    height: 30px;
+}
 </style>

@@ -32,6 +32,11 @@ const delProApi = host+'/projects/';
 
 
 
+const Testsuits = host+'/testsuits/';
+
+
+const Testcases = host+'/testcases/';
+
 
 
 // 模块/projects/5/modules/
@@ -77,5 +82,7 @@ export default {
     InterfaceApi,
     Debugtalk,
     Envs,
+    Testsuits,
+    Testcases,
 
 }

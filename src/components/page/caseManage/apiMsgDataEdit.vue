@@ -460,16 +460,18 @@
             },
             initData(i) {
                 //  初始化步骤数据
-                this.apiCaseData.param = this.apiCases[i]['param'];
-                this.apiCaseData.variable = this.apiCases[i]['variable'];
-                this.apiCaseData.json_variable = this.apiCases[i]['json_variable'];
-                this.apiCaseData.extract = this.apiCases[i]['extract'];
-                this.apiCaseData.validate = this.apiCases[i]['validate'];
-                this.apiCaseData.header = this.apiCases[i]['header'];
-                this.apiCaseData.statusCase = this.apiCases[i]['statusCase'];
-                this.form.choiceType = this.apiCases[i]['variableType'];
-                this.apiCaseData.name = this.apiCases[i]['case_name'];
-                this.apiCaseData.time = this.apiCases[i]['time'];
+                this.apiCaseData.param = JSON.parse(this.apiCases[i]['params']);
+                this.apiCaseData.variable = JSON.parse(this.apiCases[i]['dataVariable']);
+                this.apiCaseData.json_variable = this.apiCases[i]['jsonVariable'];
+                this.apiCaseData.extract = JSON.parse(this.apiCases[i]['extract']);
+                this.apiCaseData.validate = JSON.parse(this.apiCases[i]['validate']);
+                this.apiCaseData.header = JSON.parse(this.apiCases[i]['headers']);
+
+
+                // this.apiCaseData.statusCase = this.apiCases[i]['statusCase'];
+                this.form.choiceType = this.apiCases[i]['variable_type'];
+                this.apiCaseData.name = this.apiCases[i]['name'];
+                // this.apiCaseData.time = this.apiCases[i]['time'];
                 this.apiCaseData.upFunc = this.apiCases[i]['up_func'];
                 this.apiCaseData.downFunc = this.apiCases[i]['down_func'];
                 this.apiCaseData.skip = this.apiCases[i]['skip'];

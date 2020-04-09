@@ -20,7 +20,7 @@
                 <el-button type="primary" icon="el-icon-search" @click.native="handleCaseCurrentChange(1)">搜索
                 </el-button>
                 <el-button type="primary" @click.native="addCase()">添加接口用例</el-button>
-                <el-button type="primary" @click.native="runScene(caseList,true,true)">批量运行</el-button>
+                <!--<el-button type="primary" @click.native="run(caseList,true,true)">批量运行</el-button>-->
             </el-form-item>
 
         </el-form>
@@ -39,7 +39,7 @@
                                     <el-dropdown-menu slot="dropdown">
                                         <el-dropdown-item command="add">添加</el-dropdown-item>
                                         <el-dropdown-item command="edit">编辑</el-dropdown-item>
-                                        <el-dropdown-item command="stick">置顶</el-dropdown-item>
+                                        <!--<el-dropdown-item command="stick">置顶</el-dropdown-item>-->
                                         <el-dropdown-item command="del">删除</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </el-dropdown>
@@ -83,7 +83,7 @@
                                     width="45">
                             </el-table-column>
                             <el-table-column
-                                    prop="num"
+                                    prop="id"
                                     label="编号"
                                     min-width="10">
                             </el-table-column>
@@ -101,18 +101,18 @@
                                     label="操作">
                                 <template slot-scope="scope">
                                     <el-button type="primary" icon="el-icon-edit" size="mini"
-                                               @click.native="editCase(caseAll[scope.$index]['sceneId'])">
+                                               @click.native="editCase(caseAll[scope.$index]['id'])">
                                         编辑
                                     </el-button>
                                     <el-button type="primary" icon="el-icon-tickets" size="mini"
-                                               @click.native="copyCase(caseAll[scope.$index]['sceneId'])">
+                                               @click.native="copyCase(caseAll[scope.$index]['id'])">
                                         复制
                                     </el-button>
                                     <el-button type="primary" icon="el-icon-setting" size="mini"
-                                               @click.native="runScene(caseAll[scope.$index]['sceneId'])">运行
+                                               @click.native="run(caseAll[scope.$index]['id'])">运行
                                     </el-button>
                                     <el-button type="danger" icon="el-icon-delete" size="mini"
-                                               @click.native="sureView(delCase,caseAll[scope.$index]['sceneId'],caseAll[scope.$index]['name'])">
+                                               @click.native="sureView(delCase,caseAll[scope.$index]['id'],caseAll[scope.$index]['name'])">
                                         删除
                                     </el-button>
                                 </template>
@@ -136,11 +136,34 @@
                     </el-col>
                 </el-row>
             </el-tab-pane>
+            <!-- 编辑环境选择 -->
+            <el-dialog title="环境选择" :visible.sync="editEnv" width="30%">
+                <el-form ref="form" :model="Envform" label-width="100px">
+                    <el-form-item label="报告名称">
+                        <el-input v-model="Envform.report_name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="选择环境">
+                        <el-select v-model="Envform.id" filterable placeholder="请选择环境"
+                                   style="margin-right: 50px">
+                            <el-option
+                                    v-for="item in Envform.value"
+                                    :key="item.id"
+                                    :label="item.base_url"
+                                    :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="editEnv = false">取 消</el-button>
+                <el-button type="primary" @click="runScene">确 定</el-button>
+            </span>
+            </el-dialog>
             <el-tab-pane label="用例编辑" name="second" v-if="tabEditShow">
                 <div style="margin-top: 5px"></div>
                 <caseEdit
                         :allSetList="allSetList"
-                        :currentSetId = "setTempData.setId"
+                        :currentSetId="setTempData.setId"
                         :proModelData="proModelData"
                         :projectId="form.projectId"
                         :setTempData="setTempData"
@@ -184,13 +207,24 @@
         name: 'modeManage',
         data() {
             return {
+                editEnv: false,
+                Envform: {
+                    id: '',
+                    value: '',
+                    report_name: '',
+                },
+                status: false,
+                reportStatus: false,
+                sceneIds: '',
+
+
                 defaultProps: {
                     children: 'children',
-                    label: 'label'
+                    label: 'name'
                 },
                 tabValue: 'first',
                 tabEditShow: false,
-                allSetList: '',
+                allSetList: '', //  用例集合
                 setDataList: [],   //  用例集合的临时数据
                 funcAddress: '',
                 caseList: [],  //  临时存储被勾选的用例数据
@@ -221,10 +255,9 @@
         },
 
         methods: {
-
             handleNodeClick(data) {
                 this.setTempData.setId = data['id'];
-                this.setTempData.name = data['label'];
+                this.setTempData.name = data['name'];
                 this.casePage.currentPage = 1;
                 this.findCase();
             },
@@ -237,45 +270,75 @@
                     this.$refs.setEditFunc.initSet()
                 } else if (command === 'edit') {
                     this.$refs.setEditFunc.editSet()
-                } else if (command === 'stick') {
-                    this.$refs.setEditFunc.stickSet(this.setTempData.setId)
+                    // } else if (command === 'stick') {
+                    //     this.$refs.setEditFunc.stickSet(this.setTempData.setId)
                 } else if (command === 'del') {
                     this.sureView(this.delSet, null, this.setTempData.name)
                 }
             },
             findCase() {
-                this.$axios.post(this.$api.findCaseApi, {
-                    'setId': this.setTempData.setId,
-                    'projectId': this.form.projectId,
-                    'caseName': this.form.caseName,
-                    'page': this.casePage.currentPage,
-                    'sizePage': this.casePage.sizePage,
+                this.$axios.get(this.$api.Testsuits + this.setTempData.setId + '/testcases/', {
+                    params: {
+                        'page': this.casePage.currentPage,
+                        'size': this.casePage.sizePage,
+                    }
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
-                            this.caseAll = response.data['data'];
-                            this.casePage.total = response.data['total'];
+                            this.caseAll = response.data['results'];
+                            this.casePage.total = response.data['count'];
+
                         }
                     }
                 )
             },
+            get_env() {
+                this.$axios.get(this.$api.Envs, {
+                    params: {
+                        'page': 1,
+                        'size': 100,
+                    }
+                }).then(
+                    res => {
+                        this.Envform.value = res.data.results;
+                    });
+            },
             initData() {
                 //  初始化页面数据
-                this.$axios.get(this.$api.baseDataApi).then((response) => {
-                        this.proModelData = response.data['data'];
-                        this.proAndIdData = response.data['pro_and_id'];
-                        this.configData = response.data['config_name_list'];
+                this.$axios.get(this.$api.getProName).then((response) => {
+                        this.proAndIdData = response.data;
 
-                        if (response.data['user_pros']) {
+
+                        // this.proModelData = response.data;
+
+                        // this.configData = response.data['config_name_list'];
+
+                        if (response.data[0].id) {
                             this.form.projectId = this.proAndIdData[0].id;
+
+                            if (this.form.projectId) {
+                                this.$axios.get(this.$api.getModules + this.form.projectId + /modules/, {
+                                        params: {
+                                            'page': 1,
+                                            'size': 100,
+                                        }
+                                    }
+                                ).then((response) => {
+                                    this.proModelData = response.data['results'];
+                                });
+                            }
+
+
                             this.findSet()
                         }
-                        this.allSetList = response.data['set_list'];
+                        // this.allSetList = response.data['set_list'];
                     }
                 );
-                this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
-                        this.funcAddress = response['data']['data'];
-                    }
-                );
+
+
+                // this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
+                //         this.funcAddress = response['data']['data'];
+                //     }
+                // );
             },
             initProjectChoice() {
                 //  当项目选择项改变时，初始化模块和配置的数据
@@ -283,23 +346,26 @@
                 this.casePage.currentPage = 1;
                 this.findSet()
             },
+
             findSet() {
-                this.$axios.post(this.$api.findCaseSetApi, {
-                    'projectId': this.form.projectId,
-                    'page': this.setPage.currentPage,
-                    'sizePage': this.setPage.sizePage,
+                // 查询用例集
+                this.$axios.get(this.$api.ProjectsApi + this.form.projectId + '/testsuits/', {
+                    params: {
+                        'page': this.setPage.currentPage,
+                        'size': this.setPage.sizePage,
+                    }
                 }).then((response) => {
-                        this.setDataList = response.data['data'];
-                        this.allSetList[this.form.projectId] = response.data['all_set'];
-                        this.setPage.total = response.data['total'];
+                        this.setDataList = response.data['results'];
+                        this.allSetList = response.data['results'];
+                        this.setPage.total = response.data['count'];
                         if (this.setDataList[0]) {
                             this.setTempData.setId = this.setDataList[0]['id'];
-                            this.setTempData.name = this.setDataList[0]['label'];
+                            this.setTempData.name = this.setDataList[0]['name'];
                             this.$nextTick(function () {
                                 this.$refs.testTree.setCurrentKey(this.setTempData.setId);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
                                 this.findCase();
                             });
-                        }else {
+                        } else {
                             this.caseAll = []
                         }
                     }
@@ -317,18 +383,7 @@
                 this.setPage.currentPage = val;
                 this.findSet()
             },
-            delCase(caseId) {
-                this.$axios.post(this.$api.delCaseApi, {'caseId': caseId}).then((response) => {
-                        this.messageShow(this, response);
-                        this.form.caseName = '';
-                        this.findCase();
-                    }
-                )
-            },
-            runScene(sceneIds, status = false, reportStatus = false) {
-                //  status，为true时，批量运行用例，为false运行单用例
-                //  reportStatus，为true时生成报告，为false时返回临时数据
-                let _sceneIds = [];
+            run(sceneIds, status = false, reportStatus = false) {
                 if (sceneIds.length === 0) {
                     this.$message({
                         showClose: true,
@@ -337,6 +392,16 @@
                     });
                     return
                 }
+                this.sceneIds = sceneIds;
+                this.status = status;
+                this.reportStatus = reportStatus;
+                this.editEnv = true;
+            },
+            runScene(sceneIds, status = this.status, reportStatus = this.reportStatus) {
+                //  status，为true时，批量运行用例，为false运行单用例
+                //  reportStatus，为true时生成报告，为false时返回临时数据
+                let _sceneIds = [];
+
                 if (status) {
                     //  为true时，提取选中用例的id
                     for (let i = 0; i < sceneIds.length; i++) {
@@ -345,11 +410,11 @@
                 } else {
                     _sceneIds.push(sceneIds)
                 }
+                this.editEnv = false;
+
                 this.loading = true;
-                this.$axios.post(this.$api.runCaseApi, {
-                    'reportStatus': reportStatus,
-                    'sceneIds': _sceneIds,
-                    'projectId': this.form.projectId
+                this.$axios.post(this.$api.Testcases + this.sceneIds + '/run/', {
+                    'env_id': this.Envform.id,
                 }).then((response) => {
                         this.loading = false;
                         if (response.data['status'] === 0) {
@@ -390,10 +455,12 @@
             handleCaseSelection(val) {
                 //  勾选用例时，被勾选的用例会存到caseList
                 this.caseList = val;
-            },
+            }
+            ,
             cancelSelection() {
                 this.$refs.sceneMultipleTable.clearSelection();
-            },
+            }
+            ,
             addCase() {
                 if (this.setDataList.length === 0) {
                     this.$message({
@@ -409,7 +476,8 @@
                     this.$refs.caseEditFunc.initCaseData();
                 }, 0);
 
-            },
+            }
+            ,
             editCase(id) {
                 this.tabEditShow = true;
                 this.tabValue = 'second';
@@ -417,7 +485,8 @@
                     this.$refs.caseEditFunc.editCase(id);
                 }, 0);
 
-            },
+            }
+            ,
             copyCase(id) {
                 this.tabEditShow = true;
                 this.tabValue = 'second';
@@ -425,7 +494,17 @@
                     this.$refs.caseEditFunc.editCase(id, true);
                 }, 0);
 
-            },
+            }
+            ,
+            delCase(id) {
+                this.$axios.delete(this.$api.Testcases + id + '/').then((response) => {
+                        this.messageShow(this, response);
+                        this.form.caseName = '';
+                        this.findCase();
+                    }
+                )
+            }
+            ,
             delSet() {
                 //  删除用例集
                 this.$axios.post(this.$api.delCaseSetApi, {
@@ -436,15 +515,18 @@
                         }
                     }
                 )
-            },
+            }
+            ,
             tabChange(tab) {
                 //  当tab切换到接口信息时，刷新列表
                 if (tab.label === '用例信息') {
                     this.findCase()
                 }
-            },
+            }
+            ,
         },
         mounted() {
+            this.get_env();
             this.initData();
 
         },

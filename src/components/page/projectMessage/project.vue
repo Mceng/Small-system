@@ -322,7 +322,6 @@
             },
             putProject(id) {
                 this.data = {
-                    'id': id,
                     'name': this.projectData.projectName,
                     'leader': this.projectData.leader,
                     'tester': this.projectData.tester,
@@ -335,6 +334,8 @@
                 this.$axios.put(this.$api.getOneProApi + id + '/', this.data)
                     .then((response) => {
                             this.projectData.projectName = response.data['name'];
+                            this.projectData.modelFormVisible = false;
+                            this.findProject();
                         }
                     );
             },

@@ -32,18 +32,34 @@
         },
         methods: {
             addSet() {
-                this.$axios.post(this.$api.addCaseSetApi, {
-                    'projectId': this.projectId,
-                    'name': this.setData.name,
-                    'id': this.setData.id,
-                    'num': this.setData.num,
-                }).then((response) => {
-                        if (this.messageShow(this, response)) {
-                            this.$parent.findSet();
-                            this.setData.viewStatus = false;
+                if (this.setData.id) {
+                    this.$axios.put(this.$api.Testsuits + this.setData.id + '/', {
+                        'project_id': this.projectId,
+                        'name': this.setData.name,
+                    }).then((response) => {
+                            if (this.messageShow(this, response)) {
+                                this.$parent.findSet();
+                                this.setData.viewStatus = false;
+                            }
                         }
-                    }
-                )
+                    )
+
+                } else {
+                    console.log('-------------------------');
+                    console.log(this.setData.id);
+                    console.log('-------------------------');
+                    this.$axios.post(this.$api.Testsuits, {
+                        'project_id': this.projectId,
+                        'name': this.setData.name,
+                    }).then((response) => {
+                            if (this.messageShow(this, response)) {
+                                this.$parent.findSet();
+                                this.setData.viewStatus = false;
+                            }
+                        }
+                    )
+
+                }
             },
             initSet() {
                 this.setData.viewStatus = true;
@@ -61,7 +77,7 @@
                     'projectId': this.projectId,
                 }).then((response) => {
                         this.messageShow(this, response);
-                    this.$parent.findSet();
+                        this.$parent.findSet();
                     }
                 )
             },

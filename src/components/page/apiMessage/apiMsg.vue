@@ -151,9 +151,14 @@
                             </el-table-column>
                         </el-table>
 
-                        <el-button @click="cancelSelection()" size="mini" style="position: absolute;margin-top: 2px;">
+                        <el-button @click="cancelSelection()" size="mini"
+                                   style="position: absolute;margin-top: 2px;">
                             取消选择
                         </el-button>
+                        <!--<el-button @click="RunAPI()" size="mini" style="position: absolute;margin-top: 2px;margin-left:80px; ">-->
+                        <!--执行-->
+                        <!--</el-button>-->
+
                         <div class="pagination">
                             <el-pagination
                                     @current-change="handleCurrentChange"
@@ -394,7 +399,7 @@
 
             delApi(apiMsgId) {
                 //  删除接口信息
-                this.$axios.post(this.$api.delApiApi, {'apiMsgId': apiMsgId}).then((response) => {
+                this.$axios.delete(this.$api.InterfaceApi + apiMsgId + '/').then((response) => {
                         this.messageShow(this, response);
                         this.form.apiName = null;
                         if ((this.apiMsgPage.currentPage - 1) * this.apiMsgPage.sizePage + 1 === this.apiMsgPage.total) {
@@ -436,6 +441,10 @@
 
             cancelSelection() {
                 //  清除接口选择
+                this.$refs.apiMultipleTable.clearSelection();
+            },
+            RunAPI() {
+                //  执行接口(待实现)
                 this.$refs.apiMultipleTable.clearSelection();
             },
 
