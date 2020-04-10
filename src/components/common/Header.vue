@@ -15,18 +15,18 @@
                     </el-tooltip>
                 </div>
                 <!-- 消息中心 -->
-                <div class="btn-bell">
-                    <el-tooltip
-                        effect="dark"
-                        :content="message?`有${message}条未读消息`:`消息中心`"
-                        placement="bottom"
-                    >
-                        <router-link to="/tabs">
-                            <i class="el-icon-bell"></i>
-                        </router-link>
-                    </el-tooltip>
-                    <span class="btn-bell-badge" v-if="message"></span>
-                </div>
+                <!--<div class="btn-bell">-->
+                    <!--<el-tooltip-->
+                        <!--effect="dark"-->
+                        <!--:content="message?`有${message}条未读消息`:`消息中心`"-->
+                        <!--placement="bottom"-->
+                    <!--&gt;-->
+                        <!--<router-link to="/tabs">-->
+                            <!--<i class="el-icon-bell"></i>-->
+                        <!--</router-link>-->
+                    <!--</el-tooltip>-->
+                    <!--<span class="btn-bell-badge" v-if="message"></span>-->
+                <!--</div>-->
                 <!-- 用户头像 -->
                 <div class="user-avator">
                     <img src="../../assets/img/img.jpg" />
@@ -38,8 +38,11 @@
                         <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <a href="https://github.com/Mceng/" target="_blank">
-                            <el-dropdown-item>项目仓库</el-dropdown-item>
+                        <a href="https://github.com/Mceng/Small-system" target="_blank">
+                            <el-dropdown-item>项目前端仓库</el-dropdown-item>
+                        </a>
+                        <a href="https://github.com/Mceng/SmallApi" target="_blank">
+                            <el-dropdown-item>项目后端仓库</el-dropdown-item>
                         </a>
                         <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
@@ -61,7 +64,7 @@ export default {
     },
     computed: {
         username() {
-            let username = localStorage.getItem('ms_username');
+            let username = localStorage.getItem('username');
             return username ? username : this.name;
         }
     },
@@ -69,7 +72,7 @@ export default {
         // 用户名下拉菜单选择事件
         handleCommand(command) {
             if (command == 'loginout') {
-                localStorage.removeItem('ms_username');
+                localStorage.removeItem('username');
                 this.$router.push('/login');
             }
         },

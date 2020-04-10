@@ -42,9 +42,17 @@
                             <div v-for="(value, key) in item.meta_datas.data[0].request"
                                  :key="key">
                                 <div style="color: #409eff"
-                                     v-if="JSON.stringify(value) !== '{}' && key !== 'timeout'&& key !== 'verify' && value && key !== 'body'">
+                                     v-if="JSON.stringify(value) !== '{}' && key !== 'timeout'&& key !== 'verify' && value">
                                     {{ key }}：
                                     <pre style="overflow: auto;color: #000000">{{ value }}</pre>
+                                </div>
+                            </div>
+                        </el-tab-pane>
+                        <el-tab-pane label="断言结果" v-if="JSON.stringify(item.meta_datas.validators.validate_extractor[0]) !== '{}'">
+                            <div v-for="(value, key) in item.meta_datas.validators.validate_extractor[0]" :key="key">
+                                <div style="color: #409eff" v-if="JSON.stringify(value) !== '{}'">
+                                    <span>{{ key }}：</span>
+                                    <span style="color: #000000">{{ value }}</span>
                                 </div>
                             </div>
                         </el-tab-pane>
@@ -109,10 +117,10 @@
                                         params: null,
                                         json: null
                                     },
-                                    response: {status_code: null, json: null,ok:null},
+                                    response: {status_code: null, json: null, ok: null},
 
                                 }],
-                                validators:{}
+                                validators: {}
 
                             },
                         },
@@ -137,7 +145,7 @@
             showData(data) {
                 this.resultViewStatus = true;
                 this.resultData.resultShowData = data['details'][0]['records'];
-                // this.resultData.out = data['details'][0]['in_out']['out'];
+                this.resultData.out = data['details'][0]['in_out']['out'];
             },
         },
 
