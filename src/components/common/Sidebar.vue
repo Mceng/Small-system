@@ -92,6 +92,23 @@
                             },
                         ]
                     },
+                    {
+                        icon: 'el-icon-s-order',
+                        index: '4',
+                        title: '报告管理',
+                        subs: [
+                            {
+                                index: 'reportMessage',
+                                title: '报告管理'
+                            }
+                        ]
+                    },
+                    {
+                        icon: 'el-icon-s-tools',
+                        index: 'taskMessage',
+                        title: '定时任务'
+                    },
+
                     // {
                     //     icon: 'el-icon-s-order',
                     //     index: '4',
@@ -122,20 +139,20 @@
                     //         }
                     //     ]
                     // },
-                    {
-                        icon: 'el-icon-s-data',
-                        index: '7',
-                        title: '用例管理',
-                        subs: [
-                            {
-                                index: 'testcaseslist',
-                                title: '用例列表'
-                            },{
-                                index: 'testcasesadd',
-                                title: '新增用例'
-                            }
-                        ]
-                    },
+                    // {
+                    //     icon: 'el-icon-s-data',
+                    //     index: '7',
+                    //     title: '用例管理',
+                    //     subs: [
+                    //         {
+                    //             index: 'testcaseslist',
+                    //             title: '用例列表'
+                    //         }, {
+                    //             index: 'testcasesadd',
+                    //             title: '新增用例'
+                    //         }
+                    //     ]
+                    // },
                     // {
                     //     icon: 'el-icon-s-tools',
                     //     index: '8',
@@ -162,8 +179,6 @@
                     //         }
                     //     ]
                     // },
-
-
 
 
                     // {
@@ -210,11 +225,11 @@
                     //     index: 'icon',
                     //     title: '自定义图标'
                     // },
-                    // {
-                    //     icon: 'el-icon-pie-chart',
-                    //     index: 'charts',
-                    //     title: 'schart图表'
-                    // },
+                    {
+                        icon: 'el-icon-pie-chart',
+                        index: 'charts',
+                        title: 'schart图表'
+                    },
                     // {
                     //     icon: 'el-icon-rank',
                     //     index: '6',
@@ -250,11 +265,11 @@
                     //         }
                     //     ]
                     // },
-                    // {
-                    //     icon: 'el-icon-lx-redpacket_fill',
-                    //     index: '/donate',
-                    //     title: '支持作者'
-                    // }
+                    {
+                        icon: 'el-icon-lx-redpacket_fill',
+                        index: '/donate',
+                        title: '支持作者'
+                    }
                 ]
             };
         },
