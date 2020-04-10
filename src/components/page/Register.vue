@@ -86,6 +86,7 @@
         },
         methods: {
             submitForm(formName) {
+                alert('暂未完成该功能!');
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         alert('submit!');

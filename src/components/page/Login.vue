@@ -61,6 +61,7 @@
                                     localStorage.token = response.data.token;
                                     localStorage.user_id = response.data.user_id;
                                     localStorage.username = response.data.username;
+
                                 } else {
                                     // 未记住登录
                                     localStorage.clear();
@@ -68,6 +69,7 @@
                                     sessionStorage.user_id = response.data.user_id;
                                     sessionStorage.username = response.data.username;
                                 }
+                                localStorage.setItem('username', response.data.username);
 
                                 // 登录成功后路由切换
                                 that.$router.push({name: 'index'});

@@ -47,6 +47,16 @@ export default new Router({
                     component: () => import('../components/page/debugtalk/debugtalk'),
                     meta: { title: '函数列表' }
                 },
+                {
+                    path: '/reportMessage',
+                    component: () => import('../components/page/reportMessage/report'),
+                    meta: { title: '测试报告' }
+                },
+                {
+                    path: '/taskMessage',
+                    component: () => import('../components/page/taskMessage/task'),
+                    meta: { title: '测试报告' }
+                },
 
 
 
