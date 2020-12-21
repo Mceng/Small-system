@@ -55,6 +55,9 @@ const Debugtalk = host+'/debugtalks/';
 const Envs = host+'/envs/';
 
 
+const Reports = host+'/reports/';
+
+
 
 
 
@@ -65,6 +68,7 @@ const InterfaceApi = host+'/interfaces/';
 
 
 export default {
+    host,
     Login,
     ProjectsApi,
     getProName,
@@ -84,5 +88,6 @@ export default {
     Envs,
     Testsuits,
     Testcases,
+    Reports,
 
 }

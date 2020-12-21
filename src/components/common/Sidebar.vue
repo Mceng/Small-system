@@ -98,7 +98,7 @@
                         title: '报告管理',
                         subs: [
                             {
-                                index: 'reportMessage',
+                                index: 'report',
                                 title: '报告管理'
                             }
                         ]

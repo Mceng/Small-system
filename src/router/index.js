@@ -48,14 +48,19 @@ export default new Router({
                     meta: { title: '函数列表' }
                 },
                 {
-                    path: '/reportMessage',
+                    path: '/report',
                     component: () => import('../components/page/reportMessage/report'),
                     meta: { title: '测试报告' }
                 },
                 {
+                    path: '/reportMessage',
+                    component: () => import('../components/page/reportMessage/reportMessage'),
+                    meta: { title: '测试报告详情' }
+                },
+                {
                     path: '/taskMessage',
                     component: () => import('../components/page/taskMessage/task'),
-                    meta: { title: '测试报告' }
+                    meta: { title: '定时任务' }
                 },
 
 
